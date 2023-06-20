@@ -57,13 +57,7 @@
         {% for user in users %}
         <div class="user-card">
             <img src="{{ url_for('static', filename=user[0] ~ '.png') }}" alt="{{ user[0] }} Image" width="100" height="100">
-            <h4>
-              {% if user[0] == 'Arnab Mondal' %}
-                Main Developer: {{ user[0] }}
-              {% else %}
-                Developer: {{ user[0] }}
-              {% endif %}
-            </h4>
+            <h4>{{ user[0] }}</h4>
         </div>
         {% endfor %}
     </div>
