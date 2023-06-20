@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, g
+from flask import Flask, render_template, request, redirect, session, g, jsonify
 import psycopg2
 
 app = Flask(__name__)
@@ -19,6 +19,12 @@ def create_table():
     cursor = conn.cursor()
     cursor.execute('''CREATE TABLE IF NOT EXISTS devs
                       (username TEXT PRIMARY KEY,
+                       password TEXT,
+                       email TEXT)''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS person_database
+                      (id INTEGER PRIMARY KEY,
+                       name TEXT,
+                       gender TEXT,
                        password TEXT,
                        email TEXT)''')
     conn.commit()
@@ -99,6 +105,46 @@ def profile():
 def logout():
     session.pop('username', None)
     return redirect('/')
+
+# Users data API
+@app.route('/users_data', methods=['GET', 'POST'])
+def handle_users():
+    conn = get_db()
+    cursor = conn.cursor()
+
+    if request.method == 'GET':
+        cursor.execute("SELECT * FROM person_database")
+        rows = cursor.fetchall()
+
+        users = []
+        for row in rows:
+            user = {
+                'id': row[0],
+                'name': row[1],
+                'gender': row[2],
+                'password': row[3],
+                'email': row[4]
+            }
+            users.append(user)
+
+        if len(users) > 0:
+            return jsonify(users)
+        else:
+            return 'No users found', 404
+        
+    if request.method == 'POST':
+        id = request.form['id']
+        name = request.form['name']
+        email = request.form['email']
+        gender = request.form['gender']
+        password = request.form['password']
+
+        sql = """INSERT INTO person_database (id, name, email, gender, password)
+                 VALUES (%s, %s, %s, %s, %s)"""
+        cursor.execute(sql, (id, name, email, gender, password))
+        conn.commit()
+
+        return f"Database updated successfully", 201
 
 @app.route('/download')
 def download():
