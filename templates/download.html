@@ -52,18 +52,21 @@
 </div>
 
 <div class="footer">
-    <h3 style="padding-left: 10px; padding-top: 10px;">Developer team</h3><br>
-    <div class="user-images">
-        {% for user in users %}
-        <div class="user-card">
-            <img src="{{ url_for('static', filename=user[0] ~ '.png') }}" alt="{{ user[0] }} Image" width="100" height="100">
-            <h4>{{ user[0] }}</h4>
-        </div>
-        {% endfor %}
-    </div>
-    <hr style="max-width: 90%; width: 100%;">
-    <p>&copy; 2023 Srishti. All rights reserved.</p>
-</div>
+  <h3 style="padding-left: 10px; padding-top: 10px;">This our Developer team</h3><br>
+  <div class="user-images">
+      {% for user in users %}
+      <div class="user-card">
+          <img src="https://raw.githubusercontent.com/ARNAB-BOTMAS/upload_data_dev/main/{{ user[0] }}.png" alt="{{ user[0] }} Image" width="100" height="100">
+          <h4>
+            {% if user[0] == 'Arnab Mondal' %}
+                Main Developer: {{ user[0] }}
+            {% else %}
+                Developer: {{ user[0] }}
+            {% endif %}
+          </h4>
+      </div>
+      {% endfor %}
+  </div>
 
 
 <script>

@@ -1,10 +1,15 @@
 from flask import Flask, render_template, request, redirect, session, g, jsonify
+import requests
 import psycopg2
+import base64
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
 DATABASE_URL = 'postgres://srishti_database_user:Db6wKof7pq0kXcvTJt27Ko5AMhZoGV8a@dpg-ci7f8lenqql0ldbdt070-a.oregon-postgres.render.com/srishti_database'
+GITHUB_ACCESS_TOKEN = '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'
+GITHUB_REPO_NAME = 'upload_data_dev'
+GITHUB_USERNAME = 'ARNAB-BOTMAS'
 
 # Connect to the PostgreSQL database
 def get_db():
@@ -29,6 +34,7 @@ def create_table():
                        email TEXT)''')
     conn.commit()
 
+
 @app.teardown_appcontext
 def close_connection(exception):
     db = getattr(g, '_database', None)
@@ -52,18 +58,40 @@ def register():
         email = request.form['email']
         profile_picture = request.files['profile_picture']
 
-        # Save the profile picture with the user id as the file name
-        profile_picture.save(f'static/{username}.png')
+        # Encode the profile picture as base64
+        profile_picture_data = base64.b64encode(profile_picture.read()).decode('utf-8')
 
-        # Insert user data into the database
-        conn = get_db()
-        cursor = conn.cursor()
-        cursor.execute('INSERT INTO devs (username, password, email) VALUES (%s, %s, %s)',
-                       (username, password, email))
-        conn.commit()
+        # Create a JSON payload for uploading the profile picture to GitHub
+        payload = {
+            'message': 'Upload profile picture',
+            'content': profile_picture_data,
+            'branch': 'main'
+        }
 
-        return redirect('/login')
+        # Upload the profile picture to GitHub repository
+        headers = {
+            'Authorization': f'Bearer {GITHUB_ACCESS_TOKEN}',
+            'Content-Type': 'application/json',
+        }
+        file_path = f'/{username}.png'
+        upload_url = f'https://api.github.com/repos/{GITHUB_USERNAME}/{GITHUB_REPO_NAME}/contents{file_path}'
+        response = requests.put(upload_url, headers=headers, json=payload)
+
+        # Check if the upload was successful
+        if response.status_code == 201:
+            # Insert user data into the database
+            conn = get_db()
+            cursor = conn.cursor()
+            cursor.execute('INSERT INTO devs (username, password, email) VALUES (%s, %s, %s)',
+                           (username, password, email))
+            conn.commit()
+
+            return redirect('/login')
+        else:
+            return 'Failed to upload profile picture'
+
     return render_template('register.html')
+
 
 # Login page
 @app.route('/login', methods=['GET', 'POST'])
@@ -96,6 +124,7 @@ def profile():
         cursor = conn.cursor()
         cursor.execute('SELECT email FROM devs WHERE username=%s', (username,))
         email = cursor.fetchone()[0]
+        
         return render_template('profile.html', username=username, email=email)
 
     return redirect('/login')
@@ -106,6 +135,13 @@ def logout():
     session.pop('username', None)
     return redirect('/')
 
+@app.route('/download')
+def download():
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute('SELECT username FROM devs')
+    users = cursor.fetchall()
+    return render_template('download.html', users=users)
 # Users data API
 @app.route('/users_data', methods=['GET', 'POST'])
 def handle_users():
@@ -145,14 +181,6 @@ def handle_users():
         conn.commit()
 
         return f"Database updated successfully", 201
-
-@app.route('/download')
-def download():
-    conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute('SELECT username FROM devs')
-    users = cursor.fetchall()
-    return render_template('download.html', users=users)
 
 if __name__ == '__main__':
     with app.app_context():

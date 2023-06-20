@@ -12,12 +12,12 @@
         </tr>
         <tr>
             <td width ="200" >
-                <img src="{{ url_for('static', filename=username+'.png') }}" alt="Profile Picture" width="200" height="300">
+                <img src="https://raw.githubusercontent.com/ARNAB-BOTMAS/upload_data_dev/main/{{ username }}.png" alt="{{ username }} Image" width="200" height="200">
             </td>
             <td>
                 <h3 style="font-size: 50px; text-align: left; text-justify: top;">Welcome, Developer {{ username }}!</h3>
                 <p>Email: {{ email }}</p>
-                <a href="https://rb.gy/oyand">Go to database</a><br>
+                <a href="https://database-sri2.onrender.com/users_data">Go to database</a><br>
                 <a href="/logout">Logout</a>
             </td>
         </tr>
