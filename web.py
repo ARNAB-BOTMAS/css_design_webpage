@@ -1,23 +1,23 @@
 from flask import Flask, render_template, request, redirect, session, g
-import sqlite3
+import psycopg2
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-DATABASE = 'dev.sqlite'
+DATABASE_URL = 'postgres://srishti_database_user:Db6wKof7pq0kXcvTJt27Ko5AMhZoGV8a@dpg-ci7f8lenqql0ldbdt070-a.oregon-postgres.render.com/srishti_database'
 
-# Connect to the SQLite database
+# Connect to the PostgreSQL database
 def get_db():
     db = getattr(g, '_database', None)
     if db is None:
-        db = g._database = sqlite3.connect(DATABASE)
+        db = g._database = psycopg2.connect(DATABASE_URL)
     return db
 
 # Create a table to store registered users if it doesn't exist
 def create_table():
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute('''CREATE TABLE IF NOT EXISTS users
+    cursor.execute('''CREATE TABLE IF NOT EXISTS devs
                       (username TEXT PRIMARY KEY,
                        password TEXT,
                        email TEXT)''')
@@ -33,7 +33,7 @@ def close_connection(exception):
 def index():
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute('SELECT username FROM users')
+    cursor.execute('SELECT username FROM devs')
     users = cursor.fetchall()
     return render_template('index.html', users=users)
 
@@ -52,7 +52,7 @@ def register():
         # Insert user data into the database
         conn = get_db()
         cursor = conn.cursor()
-        cursor.execute('INSERT INTO users (username, password, email) VALUES (?, ?, ?)',
+        cursor.execute('INSERT INTO devs (username, password, email) VALUES (%s, %s, %s)',
                        (username, password, email))
         conn.commit()
 
@@ -69,7 +69,7 @@ def login():
         # Check if the username and password match in the database
         conn = get_db()
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM users WHERE username=? AND password=?',
+        cursor.execute('SELECT * FROM devs WHERE username=%s AND password=%s',
                        (username, password))
         user = cursor.fetchone()
 
@@ -88,7 +88,7 @@ def profile():
         username = session['username']
         conn = get_db()
         cursor = conn.cursor()
-        cursor.execute('SELECT email FROM users WHERE username=?', (username,))
+        cursor.execute('SELECT email FROM devs WHERE username=%s', (username,))
         email = cursor.fetchone()[0]
         return render_template('profile.html', username=username, email=email)
 
@@ -104,7 +104,7 @@ def logout():
 def download():
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute('SELECT username FROM users')
+    cursor.execute('SELECT username FROM devs')
     users = cursor.fetchall()
     return render_template('download.html', users=users)
 
