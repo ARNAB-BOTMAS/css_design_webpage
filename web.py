@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
 DATABASE_URL = 'postgres://srishti_database_user:Db6wKof7pq0kXcvTJt27Ko5AMhZoGV8a@dpg-ci7f8lenqql0ldbdt070-a.oregon-postgres.render.com/srishti_database'
-GITHUB_ACCESS_TOKEN = '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'
+GITHUB_ACCESS_TOKEN = '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'
 GITHUB_USERNAME = 'ARNAB-BOTMAS'
 GITHUB_REPO_NAME = 'upload_data_dev'
 
