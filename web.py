@@ -2,15 +2,14 @@ from flask import Flask, render_template, request, redirect, session, g, jsonify
 from github import Github
 import psycopg2
 import os
-import base64
+import uploads_pro
+from PIL import Image
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
 DATABASE_URL = 'postgres://srishti_database_user:Db6wKof7pq0kXcvTJt27Ko5AMhZoGV8a@dpg-ci7f8lenqql0ldbdt070-a.oregon-postgres.render.com/srishti_database'
-GITHUB_ACCESS_TOKEN = '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'
-GITHUB_USERNAME = 'ARNAB-BOTMAS'
-GITHUB_REPO_NAME = 'upload_data_dev'
+
 
 # Connect to the PostgreSQL database
 def get_db():
@@ -59,25 +58,14 @@ def register():
         password = request.form['password']
         email = request.form['email']
         profile_picture = request.files['profile_picture']
-        new_filename = f'{username}.png'  # Change 'new_file_name.jpg' to the desired filename
+        new_filename = f'{username}.jpg'  # Change 'new_file_name.jpg' to the desired filename
 
         # Save the uploaded image with the new filename
         profile_picture.save(new_filename)
-
-        # Authenticate with GitHub
-        g = Github(GITHUB_ACCESS_TOKEN)
-
-        # Get the repository
-        repo = g.get_user(GITHUB_USERNAME).get_repo(GITHUB_REPO_NAME)
+        # print(new_filename)
 
         try:
-            # Upload the image to the repository
-            with open(new_filename, 'rb') as file:
-                repo.create_file(new_filename, 'Upload image', file.read())
-            
-            # Remove the temporary file
-            os.remove(new_filename)
-
+            uploads_pro.upload(new_filename)
             conn = get_db()
             cursor = conn.cursor()
             cursor.execute('INSERT INTO devs (username, password, email) VALUES (%s, %s, %s)',
