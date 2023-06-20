@@ -1,24 +1,69 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Registration</title>
+    <title>Developer login page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 </head>
 <body>
-    <h2>Registration</h2>
-    <form method="POST" enctype="multipart/form-data">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required><br><br>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br><br>
+<div class="topnav" id="myTopnav">
+  <a href="/" class="active">Home</a>
+  <a href="/login">Log in</a>
+  <a href="/register">Register</a>
+  <a href="#about">About</a>
+  <a href="/download">Download</a>
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br><br>
+<div class="banner">
+    <h1 style="justify-content: center">Developer login</h1>
+</div>
+<br>
+<div class="body_log">
+    <div class="container">
+        <form method="POST" enctype="multipart/form-data">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required><br><br>
+    
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required><br><br>
+    
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required><br><br>
+    
+            <label for="profile_picture">Profile Picture:</label>
+            <input type="file" id="profile_picture" name="profile_picture" accept="image/png, image/jpeg" required><br><br>
+    
+            <input type="submit" value="Register">
+        </form>
+    </div>
+</div>
 
-        <label for="profile_picture">Profile Picture:</label>
-        <input type="file" id="profile_picture" name="profile_picture" accept="image/png, image/jpeg" required><br><br>
+<div class="footer">
+    <h1 style="text-align: center; padding-top: 10px;">
+        This is the page of developer to login this is only for developer not for any other user
+    </h1>
+    <hr style="max-width: 90%; width: 100%;">
+    <p>&copy; 2023 Srishti. All rights reserved.</p>
+</div>
 
-        <input type="submit" value="Register">
-    </form>
+
+<script>
+function myFunction() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}
+</script>
+
 </body>
 </html>
