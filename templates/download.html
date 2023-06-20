@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Download</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+</head>
+<body>
+
+<div class="topnav" id="myTopnav">
+  <a href="/" class="active">Home</a>
+  <a href="/login">Log in</a>
+  <a href="/register">Register</a>
+  <a href="#about">About</a>
+  <a href="/download">Download</a>
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div>
+
+<div class="banner">
+    <h1 style="justify-content: center">Download Srishti</h1>
+</div>
+<div class="body">
+    <!-- Feature Section -->
+    <section>
+        <h2>Key Features</h2>
+        <ul>
+            <li>Accurate and efficient speech-to-text conversion</li>
+            <li>Support for multiple languages and accents</li>
+            <li>Real-time transcription with instant feedback</li>
+            <li>Intelligent speaker recognition</li>
+            <li>Advanced technical intelligence for improved accuracy</li>
+        </ul>
+    </section>
+
+    <!-- Download Section -->
+    <section>
+        <h2>Get Started with Srishti AI Speech Recognition</h2>
+        <p>Download our software and start experiencing the power of advanced speech recognition.</p>
+        <a href="https://www.example.com/download" target="_blank">Download Now</a>
+    </section>
+
+    <!-- About Section -->
+    <section>
+        <h2>About Srishti AI Speech Recognition</h2>
+        <p>Srishti AI Speech Recognition is a state-of-the-art speech recognition system designed to provide accurate and efficient speech-to-text conversion. With advanced technical intelligence, it offers seamless transcription capabilities across multiple languages and accents. The system's real-time feedback and intelligent speaker recognition make it a versatile solution for various applications.</p>
+    </section>
+</div>
+
+<div class="footer">
+    <h3 style="padding-left: 10px; padding-top: 10px;">Developer team</h3><br>
+    <div class="user-images">
+        {% for user in users %}
+        <div class="user-card">
+            <img src="{{ url_for('static', filename=user[0] ~ '.png') }}" alt="{{ user[0] }} Image" width="100" height="100">
+            <h4>{{ user[0] }}</h4>
+        </div>
+        {% endfor %}
+    </div>
+    <hr style="max-width: 90%; width: 100%;">
+    <p>&copy; 2023 Srishti. All rights reserved.</p>
+</div>
+
+
+<script>
+function myFunction() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}
+</script>
+
+</body>
+</html>

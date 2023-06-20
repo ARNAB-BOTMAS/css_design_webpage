@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profile</title>
+</head>
+<body style="background-color: aqua;">
+    <table border="1" style="width: 100%; padding-left: 20px; padding-right: 20px;">
+        <tr>
+            <th colspan="2">
+                <h2>Developer</h2>
+            </th>
+        </tr>
+        <tr>
+            <td width ="200" >
+                <img src="{{ url_for('static', filename=username+'.png') }}" alt="Profile Picture" width="200" height="300">
+            </td>
+            <td>
+                <h3 style="font-size: 50px; text-align: left; text-justify: top;">Welcome, Developer {{ username }}!</h3>
+                <p>Email: {{ email }}</p>
+                <a href="https://database-sri2.onrender.com/users">Go to database</a><br>
+                <a href="/logout">Logout</a>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
