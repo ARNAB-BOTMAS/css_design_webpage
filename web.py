@@ -1,15 +1,16 @@
 from flask import Flask, render_template, request, redirect, session, g, jsonify
-import requests
+from github import Github
 import psycopg2
+import os
 import base64
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
 DATABASE_URL = 'postgres://srishti_database_user:Db6wKof7pq0kXcvTJt27Ko5AMhZoGV8a@dpg-ci7f8lenqql0ldbdt070-a.oregon-postgres.render.com/srishti_database'
-GITHUB_ACCESS_TOKEN = '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'
-GITHUB_REPO_NAME = 'upload_data_dev'
+GITHUB_ACCESS_TOKEN = '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'
 GITHUB_USERNAME = 'ARNAB-BOTMAS'
+GITHUB_REPO_NAME = 'upload_data_dev'
 
 # Connect to the PostgreSQL database
 def get_db():
@@ -49,6 +50,7 @@ def index():
     users = cursor.fetchall()
     return render_template('index.html', users=users)
 
+
 # Registration page
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -57,29 +59,25 @@ def register():
         password = request.form['password']
         email = request.form['email']
         profile_picture = request.files['profile_picture']
+        new_filename = f'{username}.png'  # Change 'new_file_name.jpg' to the desired filename
 
-        # Encode the profile picture as base64
-        profile_picture_data = base64.b64encode(profile_picture.read()).decode('utf-8')
+        # Save the uploaded image with the new filename
+        profile_picture.save(new_filename)
 
-        # Create a JSON payload for uploading the profile picture to GitHub
-        payload = {
-            'message': 'Upload profile picture',
-            'content': profile_picture_data,
-            'branch': 'main'
-        }
+        # Authenticate with GitHub
+        g = Github(GITHUB_ACCESS_TOKEN)
 
-        # Upload the profile picture to GitHub repository
-        headers = {
-            'Authorization': f'Bearer {GITHUB_ACCESS_TOKEN}',
-            'Content-Type': 'application/json',
-        }
-        file_path = f'/{username}.png'
-        upload_url = f'https://api.github.com/repos/{GITHUB_USERNAME}/{GITHUB_REPO_NAME}/contents{file_path}'
-        response = requests.put(upload_url, headers=headers, json=payload)
+        # Get the repository
+        repo = g.get_user(GITHUB_USERNAME).get_repo(GITHUB_REPO_NAME)
 
-        # Check if the upload was successful
-        if response.status_code == 201:
-            # Insert user data into the database
+        try:
+            # Upload the image to the repository
+            with open(new_filename, 'rb') as file:
+                repo.create_file(new_filename, 'Upload image', file.read())
+            
+            # Remove the temporary file
+            os.remove(new_filename)
+
             conn = get_db()
             cursor = conn.cursor()
             cursor.execute('INSERT INTO devs (username, password, email) VALUES (%s, %s, %s)',
@@ -87,7 +85,9 @@ def register():
             conn.commit()
 
             return redirect('/login')
-        else:
+        except Exception as e:
+            # Remove the temporary file in case of an error
+            os.remove(new_filename)
             return 'Failed to upload profile picture'
 
     return render_template('register.html')
