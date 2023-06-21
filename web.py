@@ -1,20 +1,14 @@
 from flask import Flask, render_template, request, redirect, session, g, jsonify
 from github import Github
 import psycopg2
+import os
 import uploads_pro
-from dotenv import load_dotenv
-load_dotenv()
-
-import cloudinary
-import cloudinary.api
-import cloudinary.uploader
-
-config = cloudinary.config(secure=True)
+import base64
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-DATABASE_URL = 'postgres://srishti_database_user:Db6wKof7pq0kXcvTJt27Ko5AMhZoGV8a@dpg-ci7f8lenqql0ldbdt070-a.oregon-postgres.render.com/srishti_database'
+DATABASE_URL = 'postgres://srishti_database_sb6x_user:GesdgP3MvK6VJWc3IKusqx3WpgLvjk31@dpg-ci9dfudph6ekmcka4cvg-a.oregon-postgres.render.com/srishti_database_sb6x'
 
 
 # Connect to the PostgreSQL database
@@ -31,7 +25,8 @@ def create_table():
     cursor.execute('''CREATE TABLE IF NOT EXISTS devs
                       (username TEXT PRIMARY KEY,
                        password TEXT,
-                       email TEXT)''')
+                       email TEXT,
+                       images BYTEA)''')
     cursor.execute('''CREATE TABLE IF NOT EXISTS person_database
                       (id INTEGER PRIMARY KEY,
                        name TEXT,
@@ -50,10 +45,28 @@ def close_connection(exception):
 @app.route('/')
 def index():
     conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute('SELECT username FROM devs')
-    users = cursor.fetchall()
-    return render_template('index.html', users=users)
+    cursor1 = conn.cursor()
+    cursor2 = conn.cursor()
+    cursor1.execute('SELECT images FROM devs')
+    cursor2.execute('SELECT username FROM devs')
+    data = cursor1.fetchall()
+    cursor1.close()
+    users = cursor2.fetchall()
+    cursor2.close()
+    print(users)
+    image_user_mapping = {}  # Dictionary to store image-user mapping
+
+    for i in range(len(users)):
+        image_data = data[i][0]
+        image_encoded = base64.b64encode(image_data).decode('utf-8')
+        username = users[i][0]
+        image_user_mapping[image_encoded] = username
+
+    conn.close()
+
+    return render_template('index.html', image_user_mapping=image_user_mapping)
+
+
 
 
 # Registration page
@@ -64,27 +77,16 @@ def register():
         password = request.form['password']
         email = request.form['email']
         profile_picture = request.files['profile_picture']
-        new_filename = f'{username}.jpg'  # Change 'new_file_name.jpg' to the desired filename
-
-        # Save the uploaded image with the new filename
-        profile_picture.save(new_filename)
-
-        # print(new_filename)
-        # def upload(filename, folder="my_photos"):
-        folder="my_photo"
-        stem = new_filename.rsplit(".", 1)[0]
-        res = cloudinary.uploader.upload(new_filename, public_id=stem, folder=folder)
-        if res:
-            print(res)
+        try:
+            profile_picture_data = profile_picture.read()
             conn = get_db()
             cursor = conn.cursor()
-            cursor.execute('INSERT INTO devs (username, password, email) VALUES (%s, %s, %s)',
-                            (username, password, email))
+            cursor.execute('INSERT INTO devs (username, password, email, images) VALUES (%s, %s, %s, %s)',
+                            (username, password, email, psycopg2.Binary(profile_picture_data)))
             conn.commit()
-
-            return f'{res}', 300
-        else:
-            return f'{res}', 404
+            return redirect('/login')
+        except Exception as e:
+            return f'Image upload not successfully {e}', 404
 
     return render_template('register.html')
 
@@ -99,13 +101,13 @@ def login():
         # Check if the username and password match in the database
         conn = get_db()
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM devs WHERE username=%s AND password=%s',
+        cursor.execute('SELECT id FROM devs WHERE username=%s AND password=%s',
                        (username, password))
         user = cursor.fetchone()
-
+        print(user)
         if user:
-            session['username'] = username
-            return redirect('/profile')
+            session['id'] = username
+            return redirect('/')
 
         return 'Invalid username or password'
 
@@ -134,10 +136,26 @@ def logout():
 @app.route('/download')
 def download():
     conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute('SELECT username FROM devs')
-    users = cursor.fetchall()
-    return render_template('download.html', users=users)
+    cursor1 = conn.cursor()
+    cursor2 = conn.cursor()
+    cursor1.execute('SELECT images FROM devs')
+    cursor2.execute('SELECT username FROM devs')
+    data = cursor1.fetchall()
+    cursor1.close()
+    users = cursor2.fetchall()
+    cursor2.close()
+
+    image_user_mapping = {}  # Dictionary to store image-user mapping
+
+    for i in range(len(users)):
+        image_data = data[i][0]
+        image_encoded = base64.b64encode(image_data).decode('utf-8')
+        username = users[i][0]
+        image_user_mapping[image_encoded] = username
+
+    conn.close()
+
+    return render_template('download.html', image_user_mapping=image_user_mapping)
 # Users data API
 @app.route('/users_data', methods=['GET', 'POST'])
 def handle_users():
@@ -181,4 +199,4 @@ def handle_users():
 if __name__ == '__main__':
     with app.app_context():
         create_table()
-    app.run(debug=True)
+    app.run(debug=True, port=8000)

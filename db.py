@@ -1,15 +1,16 @@
 import sqlite3
 
-conn = sqlite3.connect("dev.sqlite")
+# Connect to the database
+conn = sqlite3.connect('dev.sqlite')
+cursor = conn.cursor()
 
-# cursor = conn.cursor()
-# sql_query1 = """ 
-# CREATE TABLE devs (
-#     id INTEGER PRIMARY KEY AUTOINCREMENT,
-#     name VARCHAR(100),
-#     email VARCHAR(100),
-#     password VARCHAR(100),
-#     image_path VARCHAR(200)
-# );
-# """
-# cursor.execute(sql_query1)
+# Retrieve the image data from the database
+cursor.execute("SELECT ImageData FROM Images WHERE ImageId = ?", (1,))
+image_data = cursor.fetchone()[0]
+
+# Save the image data to a file
+with open('retrieved_image.jpg', 'wb') as file:
+    file.write(image_data)
+
+# Close the connection
+conn.close()

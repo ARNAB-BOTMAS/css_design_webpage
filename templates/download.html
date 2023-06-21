@@ -54,19 +54,22 @@
 <div class="footer">
   <h3 style="padding-left: 10px; padding-top: 10px;">This our Developer team</h3><br>
   <div class="user-images">
-      {% for user in users %}
-      <div class="user-card">
-          <img src="https://res.cloudinary.com/douiqlbou/image/upload/v1687300021/my_photos/{{ user[0] }}.png" alt="{{ user[0] }} Image" width="100" height="100">
-          <h4>
-            {% if user[0] == 'Arnab Mondal' %}
-                Main Developer: {{ user[0] }}
-            {% else %}
-                Developer: {{ user[0] }}
-            {% endif %}
-          </h4>
-      </div>
-      {% endfor %}
+    {% for image, username in image_user_mapping.items() %}  
+    <div class="user-card">
+        <img src="data:image/jpeg;base64,{{ image }}" alt="Image">
+        <h4>
+          {% if username == 'Arnab Mondal' %}
+              Main Developer: {{ username }}
+          {% else %}
+              Developer: {{ username }}
+          {% endif %}
+        </h4>
+    </div>
+    {% endfor %}
   </div>
+  <hr style="max-width: 90%; width: 100%;">
+  <p>&copy; 2023 Srishti. All rights reserved.</p>
+</div>
 
 
 <script>
