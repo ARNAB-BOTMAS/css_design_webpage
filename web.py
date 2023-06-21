@@ -1,9 +1,15 @@
 from flask import Flask, render_template, request, redirect, session, g, jsonify
 from github import Github
 import psycopg2
-import os
 import uploads_pro
-from PIL import Image
+from dotenv import load_dotenv
+load_dotenv()
+
+import cloudinary
+import cloudinary.api
+import cloudinary.uploader
+
+config = cloudinary.config(secure=True)
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -62,17 +68,23 @@ def register():
 
         # Save the uploaded image with the new filename
         profile_picture.save(new_filename)
+
         # print(new_filename)
-        if uploads_pro.upload(new_filename):
+        # def upload(filename, folder="my_photos"):
+        folder="my_photo"
+        stem = new_filename.rsplit(".", 1)[0]
+        res = cloudinary.uploader.upload(new_filename, public_id=stem, folder=folder)
+        if res:
+            print(res)
             conn = get_db()
             cursor = conn.cursor()
             cursor.execute('INSERT INTO devs (username, password, email) VALUES (%s, %s, %s)',
                             (username, password, email))
             conn.commit()
 
-            return redirect('/login')
+            return f'{res}', 300
         else:
-            return 'fail to upload', 404
+            return f'{res}', 404
 
     return render_template('register.html')
 
