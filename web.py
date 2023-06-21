@@ -66,12 +66,29 @@ def index():
 
     return render_template('index.html', image_user_mapping=image_user_mapping, url=url)
 
+@app.route('/download')
+def download():
+    return redirect(f"/{url}/download/Srishti")
+
+@app.route('/register')
+def register():
+    return redirect(f"/{url}/register/developer")
+
+@app.route('/login')
+def login():
+    return redirect(f"/{url}/login/developer")
+
+@app.route('/about')
+def about():
+    return redirect(f"/{url}/about/Srishti")
+
+
 
 
 
 # Registration page
-@app.route(f'/{url}/register', methods=['GET', 'POST'])
-def register():
+@app.route(f'/{url}/register/developer', methods=['GET', 'POST'])
+def register_page():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -92,8 +109,8 @@ def register():
 
 
 # Login page
-@app.route(f'/{url}/login', methods=['GET', 'POST'])
-def login():
+@app.route(f'/{url}/login/developer', methods=['GET', 'POST'])
+def login_page():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -106,14 +123,14 @@ def login():
         user = cursor.fetchone()
         if user:
             session['username'] = username
-            return redirect(f'/{url}/profile')
+            return redirect('/developer/profile')
 
         return 'Invalid username or password'
 
     return render_template('login.html', url=url)
 
 # Profile page
-@app.route(f'/{url}/profile')
+@app.route('/developer/profile')
 def profile():
     if 'username' in session:
         username = session['username']
@@ -141,8 +158,8 @@ def logout():
     session.pop('username', None)
     return redirect('/')
 
-@app.route(f'/{url}/download')
-def download():
+@app.route(f'/{url}/download/Srishti')
+def download_page():
     conn = get_db()
     cursor1 = conn.cursor()
     cursor2 = conn.cursor()
