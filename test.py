@@ -1,15 +1,12 @@
 from flask import Flask, render_template, request, redirect, session, g, jsonify
-from github import Github
 import psycopg2
 import base64
-from url import generate_hash
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
 DATABASE_URL = 'postgres://srishti_database_sb6x_user:GesdgP3MvK6VJWc3IKusqx3WpgLvjk31@dpg-ci9dfudph6ekmcka4cvg-a.oregon-postgres.render.com/srishti_database_sb6x'
 
-url = generate_hash()
 
 # Connect to the PostgreSQL database
 def get_db():
@@ -17,6 +14,7 @@ def get_db():
     if db is None:
         db = g._database = psycopg2.connect(DATABASE_URL)
     return db
+
 
 # Create a table to store registered users if it doesn't exist
 def create_table():
@@ -27,12 +25,16 @@ def create_table():
                        password TEXT,
                        email TEXT,
                        images BYTEA)''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS developer_id_cards
+                      (id_card_number SERIAL PRIMARY KEY,
+                       developer_id TEXT REFERENCES devs(username),
+                       developer_key TEXT)''')
     cursor.execute('''CREATE TABLE IF NOT EXISTS person_database
-                      (id INTEGER PRIMARY KEY,
-                       name TEXT,
-                       gender TEXT,
-                       password TEXT,
-                       email TEXT)''')
+                        (id INTEGER PRIMARY KEY,
+                        name TEXT,
+                        gender TEXT,
+                        password TEXT,
+                        email TEXT)''')
     conn.commit()
 
 
@@ -41,6 +43,7 @@ def close_connection(exception):
     db = getattr(g, '_database', None)
     if db is not None:
         db.close()
+
 
 @app.route('/')
 def index():
@@ -64,13 +67,11 @@ def index():
 
     conn.close()
 
-    return render_template('index.html', image_user_mapping=image_user_mapping, url=url)
-
-
+    return render_template('index.html', image_user_mapping=image_user_mapping)
 
 
 # Registration page
-@app.route(f'/{url}/register', methods=['GET', 'POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         username = request.form['username']
@@ -82,17 +83,17 @@ def register():
             conn = get_db()
             cursor = conn.cursor()
             cursor.execute('INSERT INTO devs (username, password, email, images) VALUES (%s, %s, %s, %s)',
-                            (username, password, email, psycopg2.Binary(profile_picture_data)))
+                           (username, password, email, psycopg2.Binary(profile_picture_data)))
             conn.commit()
-            return redirect(f'/{url}/login')
+            return redirect('/login')
         except Exception as e:
-            return f'Image upload not successfully {e}', 404
+            return f'Image upload not successful: {e}', 404
 
-    return render_template('register.html', url=url)
+    return render_template('register.html')
 
 
 # Login page
-@app.route(f'/{url}/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
@@ -106,14 +107,15 @@ def login():
         user = cursor.fetchone()
         if user:
             session['username'] = username
-            return redirect(f'/{url}/profile')
+            return redirect('/profile')
 
         return 'Invalid username or password'
 
-    return render_template('login.html', url=url)
+    return render_template('login.html')
+
 
 # Profile page
-@app.route(f'/{url}/profile')
+@app.route('/profile')
 def profile():
     if 'username' in session:
         username = session['username']
@@ -130,10 +132,11 @@ def profile():
         for row in rows:
             image_data = base64.b64encode(row[0]).decode('utf-8')
             images.append(image_data)
-        
+
         return render_template('profile.html', username=username, images=images, email=email)
 
-    return redirect(f'/{url}/login')
+    return redirect('/login')
+
 
 # Logout
 @app.route('/logout')
@@ -141,7 +144,8 @@ def logout():
     session.pop('username', None)
     return redirect('/')
 
-@app.route(f'/{url}/download')
+
+@app.route('/download')
 def download():
     conn = get_db()
     cursor1 = conn.cursor()
@@ -163,7 +167,9 @@ def download():
 
     conn.close()
 
-    return render_template('download.html', image_user_mapping=image_user_mapping, url=url)
+    return render_template('download.html', image_user_mapping=image_user_mapping)
+
+
 # Users data API
 @app.route('/users_data', methods=['GET', 'POST'])
 def handle_users():
@@ -189,7 +195,7 @@ def handle_users():
             return jsonify(users)
         else:
             return 'No users found', 404
-        
+
     if request.method == 'POST':
         id = request.form['id']
         name = request.form['name']
@@ -203,6 +209,7 @@ def handle_users():
         conn.commit()
 
         return f"Database updated successfully", 201
+
 
 if __name__ == '__main__':
     with app.app_context():
