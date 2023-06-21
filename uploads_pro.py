@@ -10,7 +10,7 @@ config = cloudinary.config(secure=True)
 
 def upload(filename, folder="my_photos"):
     print(filename)
-    stem = pathlib.Path(f"data/{filename}").stem
+    stem = pathlib.Path(f"{filename}").stem
     res = cloudinary.uploader.upload(filename, public_id=stem, folder=folder)
     print(res)
     return res
