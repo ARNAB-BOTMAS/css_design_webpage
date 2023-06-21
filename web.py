@@ -63,20 +63,16 @@ def register():
         # Save the uploaded image with the new filename
         profile_picture.save(new_filename)
         # print(new_filename)
-
-        try:
-            uploads_pro.upload(new_filename)
+        if uploads_pro.upload(new_filename):
             conn = get_db()
             cursor = conn.cursor()
             cursor.execute('INSERT INTO devs (username, password, email) VALUES (%s, %s, %s)',
-                           (username, password, email))
+                            (username, password, email))
             conn.commit()
 
             return redirect('/login')
-        except Exception as e:
-            # Remove the temporary file in case of an error
-            os.remove(new_filename)
-            return f'{e} fail to upload', 404
+        else:
+            return 'fail to upload', 404
 
     return render_template('register.html')
 
