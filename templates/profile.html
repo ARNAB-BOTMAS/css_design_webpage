@@ -12,12 +12,14 @@
         </tr>
         <tr>
             <td width ="200" >
-                <img src="https://res.cloudinary.com/douiqlbou/image/upload/v1687300021/my_photos/{{ username }}.png" alt="{{ username }} Image" width="200" height="200">
+            {% for image in images %}
+                <img src="data:image/jpeg;base64,{{ image }}" style="width: 200px; height: 200px; margin: 10px;">
+            {% endfor %}
             </td>
             <td>
                 <h3 style="font-size: 50px; text-align: left; text-justify: top;">Welcome, Developer {{ username }}!</h3>
                 <p>Email: {{ email }}</p>
-                <a href="https://database-sri2.onrender.com/users_data">Go to database</a><br>
+                <a href="https://webpage-srishti.onrender.com/users_data">Go to database</a><br>
                 <a href="/logout">Logout</a>
             </td>
         </tr>

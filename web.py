@@ -101,13 +101,12 @@ def login():
         # Check if the username and password match in the database
         conn = get_db()
         cursor = conn.cursor()
-        cursor.execute('SELECT id FROM devs WHERE username=%s AND password=%s',
+        cursor.execute('SELECT * FROM devs WHERE username=%s AND password=%s',
                        (username, password))
         user = cursor.fetchone()
-        print(user)
         if user:
-            session['id'] = username
-            return redirect('/')
+            session['username'] = username
+            return redirect('/profile')
 
         return 'Invalid username or password'
 
@@ -119,11 +118,20 @@ def profile():
     if 'username' in session:
         username = session['username']
         conn = get_db()
-        cursor = conn.cursor()
-        cursor.execute('SELECT email FROM devs WHERE username=%s', (username,))
-        email = cursor.fetchone()[0]
+        cursor1 = conn.cursor()
+        cursor2 = conn.cursor()
+        cursor1.execute('SELECT email FROM devs WHERE username=%s', (username,))
+        email = cursor1.fetchone()[0]
+        cursor1.close()
+        cursor2.execute('SELECT images FROM devs WHERE username=%s', (username,))
+        rows = cursor2.fetchall()
+
+        images = []
+        for row in rows:
+            image_data = base64.b64encode(row[0]).decode('utf-8')
+            images.append(image_data)
         
-        return render_template('profile.html', username=username, email=email)
+        return render_template('profile.html', username=username, images=images, email=email)
 
     return redirect('/login')
 
