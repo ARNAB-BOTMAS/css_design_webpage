@@ -27,8 +27,8 @@ def create_table():
                        password TEXT,
                        email TEXT,
                        images BYTEA)''')
-    cursor.execute('''CREATE TABLE IF NOT EXISTS person_database
-                      (id INTEGER PRIMARY KEY,
+    cursor.execute('''CREATE TABLE IF NOT EXISTS person_database_sri
+                      (id TEXT PRIMARY KEY,
                        name TEXT,
                        gender TEXT,
                        password TEXT,
@@ -188,7 +188,7 @@ def handle_users():
     cursor = conn.cursor()
 
     if request.method == 'GET':
-        cursor.execute("SELECT * FROM person_database")
+        cursor.execute("SELECT * FROM person_database_sri")
         rows = cursor.fetchall()
 
         users = []
@@ -206,20 +206,23 @@ def handle_users():
             return jsonify(users)
         else:
             return 'No users found', 404
-        
+
     if request.method == 'POST':
-        id = request.form['id']
-        name = request.form['name']
-        email = request.form['email']
-        gender = request.form['gender']
-        password = request.form['password']
+        try:
+            id = request.form['id']
+            name = request.form['name']
+            email = request.form['email']
+            gender = request.form['gender']
+            password = request.form['password']
 
-        sql = """INSERT INTO person_database (id, name, email, gender, password)
-                 VALUES (%s, %s, %s, %s, %s)"""
-        cursor.execute(sql, (id, name, email, gender, password))
-        conn.commit()
+            sql = """INSERT INTO person_database_sri (id, name, email, gender, password)
+                     VALUES (%s, %s, %s, %s, %s)"""
+            cursor.execute(sql, (id, name, email, gender, password))
+            conn.commit()
 
-        return f"Database updated successfully", 201
+            return "Database updated successfully", 201
+        except Exception as e:
+            return f"Failed to upload data: {str(e)}", 500
 
 def delete_row(username):
     conn = get_db()
