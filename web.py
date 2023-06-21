@@ -76,7 +76,7 @@ def register():
         except Exception as e:
             # Remove the temporary file in case of an error
             os.remove(new_filename)
-            return 'Failed to upload profile picture'
+            return 'e'
 
     return render_template('register.html')
 
@@ -173,4 +173,4 @@ def handle_users():
 if __name__ == '__main__':
     with app.app_context():
         create_table()
-    app.run(debug=True)
+    app.run(debug=True, port=8000)
