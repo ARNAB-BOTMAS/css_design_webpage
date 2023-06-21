@@ -173,4 +173,4 @@ def handle_users():
 if __name__ == '__main__':
     with app.app_context():
         create_table()
-    app.run(debug=True, port=8000)
+    app.run(debug=True)
