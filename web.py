@@ -76,7 +76,7 @@ def register():
         except Exception as e:
             # Remove the temporary file in case of an error
             os.remove(new_filename)
-            return e
+            return f'{e} fail to upload', 404
 
     return render_template('register.html')
 
