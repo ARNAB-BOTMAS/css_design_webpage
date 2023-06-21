@@ -204,6 +204,22 @@ def handle_users():
 
         return f"Database updated successfully", 201
 
+def delete_row(username):
+    conn = get_db()
+    cursor = conn.cursor()
+
+    query = "DELETE FROM devs WHERE username = %s"
+    cursor.execute(query, (username,))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+@app.route('/delete/<username>', methods=['GET'])
+def delete_user(username):
+    delete_row(username)
+    return f"Deleted user with username: {username}"
+
 if __name__ == '__main__':
     with app.app_context():
         create_table()
