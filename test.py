@@ -64,7 +64,6 @@ def index():
     cursor1.close()
     users = cursor2.fetchall()
     cursor2.close()
-    print(users)
     image_user_mapping = {}  # Dictionary to store image-user mapping
 
     for i in range(len(users)):
@@ -168,18 +167,17 @@ def login_page():
                        (username, password))
         user = cursor.fetchone()
         hash_url = user[0]
-        print(user)
         if user:
             session['username'] = username
-            return redirect(url_for('profile', hash_url=hash_url))
+            return redirect('/profile')
 
         return 'Invalid username or password'
 
     return render_template('login.html', url=url)
 
 # Profile page
-@app.route('/profile/<hash_url>')
-def profile(hash_url):
+@app.route('/profile')
+def profile():
     if 'username' in session:
         username = session['username']
         conn = get_db()
