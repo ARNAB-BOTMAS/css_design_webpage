@@ -26,29 +26,32 @@
         }
 
         .header h2 {
-            color: red;
+            color: rgb(170, 0, 255);
             font-size: 24px;
             margin: 0;
             padding: 10px;
+            text-shadow: 0 0 20px #fff;
+        }
+        .header h2 {
+            font-size: 30px;
         }
 
+        /* Responsive styles */
+        @media (max-width: 767px) {
+            .header h2 {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h2 {
+                font-size: 20px;
+            }
+        }
         .profile_container {
             display: flex;
             align-items: center;
             justify-content: space-between;
-        }
-
-        .profile_pic {
-            width: 300px;
-            height: auto;
-        }
-
-        .profile_text {
-            flex: 1;
-            text-align: left;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
         }
 
         .profile {
@@ -81,7 +84,7 @@
                 <img src="data:image/jpeg;base64,{{ image }}" class="profile_pic">
             {% endfor %}
             <div class="profile_text">
-                <h3 class="dev_name">Welcome, Developer {{ username }}!</h3>
+                <h3>Welcome, Developer {{ username }}!</h3>
                 <p style="text-shadow: 0 0 20px #d600ff;">Email: {{ email }}</p>
                 <a href="/users_data">Go to database</a><br>
                 <a href="/logout">Logout</a>
