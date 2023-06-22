@@ -1,7 +1,7 @@
 import hashlib
-import datetime
 import random
 import string
+from datetime import datetime
 
 # Generate a random quote
 def generate_quote():
@@ -10,6 +10,7 @@ def generate_quote():
     return quote
 
 def generate_hash():
+    import datetime
     hash_key = []
     i = 0
     while i<4:        
@@ -26,3 +27,14 @@ def generate_hash():
         i += 1
     url = '/'.join(hash_key)
     return url
+
+def user_hash(value1, value2):
+    secret_key = "Developer_user_"
+    now = datetime.now()
+    timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
+    data = f"{value1}{value2}{secret_key}{timestamp}".encode('utf-8')
+    hash_object = hashlib.sha256(data)
+    hash_code = hash_object.hexdigest()
+    return hash_code
+
+# print(user_hash('Arnab Mondal', 'Arnab@8016'))

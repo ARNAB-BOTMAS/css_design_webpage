@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, session, g, jsonify, url_for
+from github import Github
 import psycopg2
 import base64
 from url import generate_hash, user_hash
@@ -9,8 +10,7 @@ from functools import wraps
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-# DATABASE_URL = 'postgres://srishti_database_sb6x_user:GesdgP3MvK6VJWc3IKusqx3WpgLvjk31@dpg-ci9dfudph6ekmcka4cvg-a.oregon-postgres.render.com/srishti_database_sb6x'
-DATABASE_URL = 'postgres://srishti_database_sb6x_user:GesdgP3MvK6VJWc3IKusqx3WpgLvjk31@dpg-ci9dfudph6ekmcka4cvg-a/srishti_database_sb6x'
+DATABASE_URL = 'postgres://srishti_database_sb6x_user:GesdgP3MvK6VJWc3IKusqx3WpgLvjk31@dpg-ci9dfudph6ekmcka4cvg-a.oregon-postgres.render.com/srishti_database_sb6x'
 
 url = generate_hash()
 
