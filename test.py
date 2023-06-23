@@ -283,7 +283,7 @@ def handle_users():
             users.append(user)
 
         if len(users) > 0:
-            return jsonify(users)
+            return jsonify(users), 200
         else:
             return 'No users found', 404
 
