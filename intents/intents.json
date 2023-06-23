@@ -1,0 +1,322 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": [
+        "hi",
+        "sri",
+        "hii",
+        "hey",
+        "hello",
+        "srishti",
+        "hey sri",
+        "wake up",
+        "wake up sri"
+
+      ],
+      "responses": [
+        "Hello sir.",
+        "How Are You sir?",
+        "Always For You Sir.",
+        "Here is your assistant, How may I help you?"
+      ]
+    },
+    {
+      "tag": "bye",
+      "patterns": [
+        "bye",
+        "quit",
+        "rest",
+        "later",
+        "bye bye",
+        "good bye",
+        "sleep now",
+        "i don't need",
+        "get same rest",
+        "see you later",
+        "you need break",
+        "you need a break",
+        "you can quit now",
+        "i don't any help for now",
+        "i don't need any help for now"
+
+      ],
+      "responses": [
+        "exit"
+      ]
+    },
+    {
+      "tag": "health",
+      "patterns": [
+        "how are you",
+        "are you good",
+        "are you fine",
+        "how do you do",
+        "kemon acho Tumi",
+        "how are you today",
+        "how are you srishti"
+
+      ],
+      "responses": [
+        "Fine.",
+        "Perfect.",
+        "I am Good.",
+        "I am Perfectly fine.",
+        "I am fine, what about you"
+      ]
+    },
+    {
+      "tag": "answer",
+      "patterns": [
+        "i am fine",
+        "ami bhalo achi",
+        "i am fine thanks for asking"
+      ],
+      "responses": [
+        "Glad to hear that."
+      ]
+    },
+    {
+      "tag": "identity",
+      "patterns": [
+        "your name",
+        "what is your name",
+        "who are you"
+      ],
+      "responses": [
+        "I am SRISHTI",
+        "I am Speech Recognition Internal System Host Technical Intelligence, or you can call me SRISHTI :)"
+      ]
+    },
+    {
+      "tag": "time",
+      "patterns": [
+        "time",
+        "current time",
+        "what time is it",
+        "what's the time",
+        "what is the time",
+        "tell me the current time"
+
+      ],
+      "responses": [
+        "time"
+      ]
+    },
+    {
+      "tag": "date",
+      "patterns": [
+        "date",
+        "what today",
+        "current date",
+        "what day is it",
+        "what is the date",
+        "tell me the current date"
+
+      ],
+      "responses": [
+        "date"
+      ]
+    },
+    {
+      "tag": "face",
+      "patterns": [
+        "who am i",
+        "what is my name",
+        "what's my name",
+        "my name",
+        "tell me who am i"
+
+      ],
+      "responses": [
+        "face"
+      ]
+    },
+    {
+      "tag": "register",
+      "patterns": [
+        "add new user",
+        "add new master",
+        "add user",
+        "register new user",
+        "add new person"
+
+      ],
+      "responses": [
+        "register"
+      ]
+    },
+    {
+      "tag": "wikipedia",
+      "patterns": [
+        "who is",
+        "about",
+        "tell me about",
+        "what is",
+        "wikipedia"
+
+      ],
+      "responses": [
+        "wikipedia"
+      ]
+    },
+    {
+      "tag": "search",
+      "patterns": [
+        "google",
+        "search",
+        "search about"
+      ],
+      "responses": [
+        "search"
+      ]
+    },
+    {
+      "tag": "youtube",
+      "patterns": [
+        "music",
+        "videos",
+        "youtube",
+        "play video",
+        "play songs",
+        "video about",
+        "latest video"
+      ],
+      "responses": [
+        "youtube"
+      ]
+    },
+    {
+      "tag": "none",
+      "patterns": [
+        "",
+        " "
+      ],
+      "responses": [
+        "none"
+      ]
+    },
+    {
+      "tag": "help",
+      "patterns": [
+        "what are you doing"
+      ],
+      "responses": [
+        "To help your queries and provide the necessary answer for your queries :)"
+      ]
+    },
+    {
+      "tag": "location",
+      "patterns": [
+        "where am i",
+        "where we are",
+        "what is the location",
+        "location"
+      ],
+      "responses": [
+        "location"
+      ]
+    },
+    {
+      "tag": "weather",
+      "patterns": [
+        "weather",
+        "how is weather",
+        "how today's weather",
+        "What is the current temperature outside",
+        "What is the forecast for the weekend"
+      ],
+      "responses": [
+        "weather"
+      ]
+    },
+    {
+      "tag": "no",
+      "patterns": [
+        "no",
+        "nope",
+        "not now",
+        "i don't have any",
+        "i don't need any help for now"
+      ],
+      "responses": [
+        "okey",
+        "you can call me anytime",
+        "ok i am going to sleep, you can wake up me if you need any help"
+      ]
+    },
+    {
+      "tag": "yes",
+      "patterns": [
+        "yes",
+        "yes i have work for you",
+        "i need you to do some think for me",
+        "i need help"
+      ],
+      "responses": [
+        "okey",
+        "tell me your question",
+        "i am happy to help you"
+      ]
+    },
+    {
+      "tag": "chat",
+      "patterns": [
+        "how",
+        "who",
+        "what",
+        "pome",
+        "where",
+        "is it",
+        "who is",
+        "how was",
+        "what is",
+        "where is",
+        "write a pome"
+      ],
+      "responses": [
+        "chat"
+      ]
+    },
+    {
+      "tag": "recommendation",
+      "patterns": [
+        "did you recommend any place to visit",
+        "did you recommend any places",
+        "did you recommend any restaurant"
+      ],
+      "responses": [
+        "recommendation"
+      ]
+    },
+    {
+      "tag": "introduction",
+      "patterns": [
+        "introduce yourself ",
+        "introduce",
+        "introduce yourself to everyone"
+      ],
+      "responses": [
+        "I am SRISHTI, the Speech Recognition Internal System Host Technical Intelligence. I am an advanced AI system developed to understand and process human speech. My primary objective is to provide intelligent assistance and enhance the user experience through natural language interaction. With sophisticated speech recognition capabilities, I can comprehend spoken words and execute tasks based on user commands. My purpose is to deliver efficient and effective technical intelligence to users like you."
+      ]
+    },
+    {
+      "tag": "program",
+      "patterns": [
+        "c",
+        "code",
+        "java",
+        "prolog",
+        "python",
+        "program",
+        "save program",
+        "write a code",
+        "save a programme",
+        "write a programme"
+      ],
+      "responses": [
+        "code"
+      ]
+    }
+  ]
+}
