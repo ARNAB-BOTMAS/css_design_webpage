@@ -7,6 +7,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <style>
+        .table-container {
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+    </style>
 </head>
 <body bgcolor="#333">
     <div class="pronav" id="mypronav">
@@ -21,10 +29,6 @@
         <div class="profile_text">
             <h3>Welcome, Developer {{ username }}!</h3>
             <p>Email: {{ email }}</p>
-            <label>
-                API_KEY<input type="text" id="text-input" placeholder="********************************************" value="{{ valid_api_key }}" readonly class="api_tab">
-            </label>
-            <button onclick="copyText()">Copy</button>
             <a href="/logout"><button>Log Out</button></a><br><br>
             <button onclick="showTable('table1')">Table 1</button>
             <button onclick="showTable('table2')">Table 2</button>
@@ -32,14 +36,14 @@
     </div>
         <div class="user_database">
             <div id="table1" class="table-container active">
-                <table>
+                <table border="1">
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
                         <th>Gender</th>
                         <th>Email</th>
                         <th>Password</th>
-                        <th>Action</th>
+                        <th>Password</th>
                     </tr>
                     {% for row in user_database %}
                         <tr>
@@ -95,31 +99,6 @@
                 // Show the selected table container
                 var tableContainer = document.getElementById(tableId);
                 tableContainer.classList.add('active');
-            }
-
-            function copyText() {
-                /* Get the input field and its value */
-                var inputField = document.getElementById("text-input");
-                var textToCopy = inputField.value;
-
-                /* Create a temporary input element to hold the text */
-                var tempInput = document.createElement("input");
-                tempInput.type = "text";
-                tempInput.value = textToCopy;
-                document.body.appendChild(tempInput);
-
-                /* Copy the text from the input element */
-                tempInput.select();
-                document.execCommand("copy");
-
-                /* Remove the temporary input element */
-                document.body.removeChild(tempInput);
-
-                /* Clear the input field */
-                inputField.value = "";
-
-                /* Alert the user that the text has been copied */
-                alert("Text copied: " + textToCopy);
             }
         </script>
 </body>

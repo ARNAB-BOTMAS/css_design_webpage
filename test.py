@@ -6,6 +6,7 @@ from url import generate_hash, user_hash
 from sende_mail_automation import send_mail
 import json
 from functools import wraps
+import requests
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -64,6 +65,7 @@ def index():
     cursor1.close()
     users = cursor2.fetchall()
     cursor2.close()
+    print(users)
     image_user_mapping = {}  # Dictionary to store image-user mapping
 
     for i in range(len(users)):
@@ -167,17 +169,18 @@ def login_page():
                        (username, password))
         user = cursor.fetchone()
         hash_url = user[0]
+        print(user)
         if user:
             session['username'] = username
-            return redirect('/profile')
+            return redirect(url_for('profile', hash_url=hash_url))
 
         return 'Invalid username or password'
 
     return render_template('login.html', url=url)
 
 # Profile page
-@app.route('/profile')
-def profile():
+@app.route('/profile/<hash_url>')
+def profile(hash_url):
     if 'username' in session:
         username = session['username']
         conn = get_db()
@@ -193,8 +196,31 @@ def profile():
         for row in rows:
             image_data = base64.b64encode(row[0]).decode('utf-8')
             images.append(image_data)
+        athu_url ='https://webpage-srishti.onrender.com/users_data'
+        valid_api_key = hash_url
+        headers = {
+            'X-API-Key': valid_api_key
+        }
         
-        return render_template('profile.html', username=username, images=images, email=email)
+        data = requests.get(athu_url, headers=headers)
+        if data.status_code == 200:
+            datas = data.json()
+            user_database = []
+            rows = []
+            for row in datas:
+                user = {
+                    'id': row['id'],
+                    'name': row['name'],
+                    'gender': row['gender'],
+                    'email': row['email'],
+                    'password': row['password']
+                }
+                user_database.append(user)
+            # print(user_database)
+                
+        else:
+            print('error')
+        return render_template('profile.html', username=username, images=images, email=email, user_database=user_database, valid_api_key=valid_api_key)
 
     return redirect(f'/{url}/login')
 

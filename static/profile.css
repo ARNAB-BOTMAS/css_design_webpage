@@ -1,0 +1,184 @@
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.body{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.pronav {
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    justify-content: center;
+    color: aliceblue;
+}
+
+.pronav::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/7a5a3db7-fb07-4532-aa4c-93f5a5d5d651/dbff1rj-c8fb290d-5a35-4137-b925-759ea0e98f44.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzdhNWEzZGI3LWZiMDctNDUzMi1hYTRjLTkzZjVhNWQ1ZDY1MVwvZGJmZjFyai1jOGZiMjkwZC01YTM1LTQxMzctYjkyNS03NTllYTBlOThmNDQuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.Zk74FqcSimKjviOn9BE6AJBML75_bVcz0PzvFmwgm2Y');
+    background-size: cover;
+    filter: blur(8px); /* Adjust the blur intensity as needed */
+    z-index: -1;
+}
+
+.probanner {
+    background-image: url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/7a5a3db7-fb07-4532-aa4c-93f5a5d5d651/dbff1rj-c8fb290d-5a35-4137-b925-759ea0e98f44.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzdhNWEzZGI3LWZiMDctNDUzMi1hYTRjLTkzZjVhNWQ1ZDY1MVwvZGJmZjFyai1jOGZiMjkwZC01YTM1LTQxMzctYjkyNS03NTllYTBlOThmNDQuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.Zk74FqcSimKjviOn9BE6AJBML75_bVcz0PzvFmwgm2Y');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    color: #f2f2f2;
+    padding: 20px;
+}
+
+.propic {
+    padding: 20px;
+}
+
+.profile_pic {
+    width: 200px;
+    height: auto;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0px 20px rgba(0, 0, 0, 0.4);
+    border: 2px solid #fff;
+    animation: glow 1s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        box-shadow: 0 0 10px #00b7ff, 0 0 20px #00b7ffbe, 0 0 30px #00b7ff7b;
+    }
+    to {
+        box-shadow: 0 0 20px #bd00ff, 0 0 30px #bb00ffa5, 0 0 40px #bb00ff65;
+    }
+}
+
+.profile_text {
+    background-color: #3333338c;
+    width: 100%;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+/* Responsive Styles */
+
+@media screen and (max-width: 768px) {
+    .pronav {
+        text-align: left;
+        justify-content: flex-start;
+        padding: 10px;
+    }
+
+    .pronav h1 {
+        margin: 0;
+    }
+
+    .probanner {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+    }
+
+    .propic {
+        padding: 10px;
+    }
+
+    .profile_text {
+        padding: 15px;
+    }
+}
+
+
+.user_database{
+    margin: 20px;
+    /* display: flex; */
+    max-width: auto;
+    background-color: #f2f2f2;
+    padding: 20px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.user_database table{
+    border: 2px solid #333;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.user_database table th{
+    color: antiquewhite;
+    background-color: #333;
+}
+
+.table-container {
+    display: none;
+}
+.active {
+    display: block;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table, th, td {
+    border: 1px solid black;
+    padding: 8px;
+}
+
+th {
+    background-color: #f2f2f2;
+    text-align: left;
+}
+
+@media screen and (max-width: 600px) {
+    table {
+        border: 0;
+    }
+
+    table thead {
+        display: none;
+    }
+
+    table tr {
+        margin-bottom: 10px;
+        display: block;
+        border-bottom: 2px solid #ddd;
+    }
+
+    table td, table th {
+        display: block;
+        text-align: left;
+        font-size: 13px;
+        border-bottom: 1px dotted #ccc;
+    }
+
+    table td::before, table th::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+}
+
+.api_tab{
+    max-width: 80%;
+    width: 20%;
+}

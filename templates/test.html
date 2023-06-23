@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Copy Button</title>
+    <style>
+        .box {
+            width: 300px;
+            height: 100px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="box" id="text-box">This is the text to be copied.</div>
+    <button onclick="copyText()">Copy</button>
+
+    <script>
+        function copyText() {
+            /* Get the full text from the text box */
+            var textBox = document.getElementById("text-box");
+            var fullText = textBox.textContent || textBox.innerText;
+
+            /* Get the truncated text to display */
+            var truncatedText = fullText.substring(0, 5) + "*".repeat(fullText.length - 5);
+
+            /* Create a temporary input element to hold the full text */
+            var tempInput = document.createElement("input");
+            tempInput.type = "text";
+            tempInput.value = fullText;
+            document.body.appendChild(tempInput);
+
+            /* Copy the full text from the input element */
+            tempInput.select();
+            document.execCommand("copy");
+
+            /* Remove the temporary input element */
+            document.body.removeChild(tempInput);
+
+            /* Replace the text in the box with the truncated text */
+            textBox.innerText = truncatedText;
+
+            /* Alert the user that the text has been copied */
+            alert("Text copied: " + fullText);
+        }
+    </script>
+</body>
+</html>
