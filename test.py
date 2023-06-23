@@ -201,7 +201,6 @@ def profile(hash_url):
         headers = {
             'X-API-Key': valid_api_key
         }
-        
         data = requests.get(athu_url, headers=headers)
         if data.status_code == 200:
             datas = data.json()
@@ -216,13 +215,10 @@ def profile(hash_url):
                     'password': row['password']
                 }
                 user_database.append(user)
-            # print(user_database)
-                
         else:
-            print('error')
-        return render_template('profile.html', username=username, images=images, email=email, user_database=user_database, valid_api_key=valid_api_key)
-
-    return redirect(f'/{url}/login')
+            return "/login"
+    return render_template('profile.html', username=username, images=images, email=email, user_database=user_database, valid_api_key=valid_api_key)    
+    
 
 # Logout
 @app.route('/logout')
