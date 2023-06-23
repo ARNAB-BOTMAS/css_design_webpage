@@ -3,7 +3,7 @@ from github import Github
 import psycopg2
 import base64
 from url import generate_hash, user_hash
-from sende_mail_automation import send_mail
+from sende_mail_automation import send_mail, dev_mail
 import json
 from functools import wraps
 import requests
@@ -145,7 +145,7 @@ def register_page():
             
             cursor2.execute('INSERT INTO API_KEY (api_key) VALUES (%s)', (hash_id_code,))
             cursor2.close()
-            
+            dev_mail(username, hash_id_code, email)
             conn.commit()
             return redirect('/login')
         except Exception as e:
