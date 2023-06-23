@@ -184,6 +184,7 @@ def profile(hash_url):
     if 'username' in session:
         username = session['username']
         conn = get_db()
+        cursor = conn.cursor()
         cursor1 = conn.cursor()
         cursor2 = conn.cursor()
         cursor1.execute('SELECT email FROM developer_database WHERE username=%s', (username,))
@@ -191,32 +192,26 @@ def profile(hash_url):
         cursor1.close()
         cursor2.execute('SELECT images FROM developer_database WHERE username=%s', (username,))
         rows = cursor2.fetchall()
-
+        valid_api_key = hash_url
         images = []
         for row in rows:
             image_data = base64.b64encode(row[0]).decode('utf-8')
             images.append(image_data)
-        athu_url ='https://webpage-srishti.onrender.com/users_data'
-        valid_api_key = hash_url
-        headers = {
-            'X-API-Key': valid_api_key
-        }
-        data = requests.get(athu_url, headers=headers)
-        if data.status_code == 200:
-            datas = data.json()
-            user_database = []
-            rows = []
-            for row in datas:
-                user = {
-                    'id': row['id'],
-                    'name': row['name'],
-                    'gender': row['gender'],
-                    'email': row['email'],
-                    'password': row['password']
-                }
-                user_database.append(user)
-        else:
-            return "/login"
+
+        cursor.execute("SELECT * FROM person_database_sri")
+        data = cursor.fetchall()
+        user_database = []
+        for row in data:
+            user = {
+                'id': row[0],
+                'name': row[1],
+                'gender': row[2],
+                'password': row[3],
+                'email': row[4]
+            }
+            user_database.append(user)
+    else:
+        return "/login"
     return render_template('profile.html', username=username, images=images, email=email, user_database=user_database, valid_api_key=valid_api_key)    
     
 
