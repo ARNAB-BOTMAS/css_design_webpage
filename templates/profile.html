@@ -31,7 +31,17 @@
         </div>
     </div>
         <div class="user_database">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for message in messages %}
+                            <div class="flash-message">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
             <div id="table1" class="table-container active">
+                <h2>Active user</h2>
                 <table>
                     <tr>
                         <th>ID</th>
@@ -49,8 +59,10 @@
                             <td>{{ row['email'] }}</td>
                             <td>{{ row['password'] }}</td>
                             <td>
-                                <form method="DELETE">
-                                    <input type="text" name="user_id" id="user_id" value="{{ row['id'] }}" hidden>
+                                <form method="POST" action="/delete">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="user_id" value="{{ row['id'] }}">
+                                    <input type="hidden" name="url" value="{{ valid_api_key }}">
                                     <input type="submit" value="DELETE" style="width: 100%;">
                                 </form>
                             </td>
@@ -60,27 +72,20 @@
             </div>
 
             <div id="table2" class="table-container">
-                <h2>Table 2</h2>
+                <h2>Active Face ID</h2>
                 <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Product</th>
-                            <th>Price</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Phone</td>
-                            <td>$500</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Laptop</td>
-                            <td>$1000</td>
-                        </tr>
-                    </tbody>
+                    <tr>
+                        <th>Face_ID</th>
+                    </tr>
+                    {% set seen_ids = [] %}
+                    {% for row in face_id %}
+                        {% if row['face_id'] not in seen_ids %}
+                            {% set _ = seen_ids.append(row['face_id']) %}
+                            <tr>
+                                <td>{{ row['face_id'] }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
                 </table>
             </div>
         </div>

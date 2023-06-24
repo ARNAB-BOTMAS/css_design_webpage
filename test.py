@@ -1,9 +1,9 @@
-from flask import Flask, render_template, request, redirect, session, g, jsonify, url_for
+from flask import Flask, render_template, request, redirect, session, g, jsonify, url_for, flash, get_flashed_messages
 from github import Github
 import psycopg2
 import base64
 from url import generate_hash, user_hash
-from sende_mail_automation import send_mail, dev_mail
+from sende_mail_automation import send_mail, dev_mail, delete_mail
 import json
 from functools import wraps
 import requests
@@ -93,6 +93,7 @@ def login():
 @app.route('/about')
 def about():
     return redirect(f"/{url}/about/Srishti")
+
 
 @app.route('/apis')
 def apis_page():
@@ -187,6 +188,7 @@ def profile(hash_url):
         cursor = conn.cursor()
         cursor1 = conn.cursor()
         cursor2 = conn.cursor()
+        cursor3 = conn.cursor()
         cursor1.execute('SELECT email FROM developer_database WHERE username=%s', (username,))
         email = cursor1.fetchone()[0]
         cursor1.close()
@@ -210,9 +212,21 @@ def profile(hash_url):
                 'email': row[4]
             }
             user_database.append(user)
+        cursor.close()
+        cursor3.execute('SELECT * FROM test_user_face_for_pro')
+        face_data = cursor3.fetchall()
+        face_id = []
+        for row1 in face_data:
+            face = {
+                'id': row1[0],
+                'face_id': row1[1],
+            }
+            face_id.append(face)
+        cursor3.close()
     else:
-        return "/login"
-    return render_template('profile.html', username=username, images=images, email=email, user_database=user_database, valid_api_key=valid_api_key)    
+        return redirect('/login')
+    
+    return render_template('profile.html', username=username, images=images, email=email, user_database=user_database, valid_api_key=valid_api_key, face_id=face_id)    
     
 
 # Logout
@@ -283,7 +297,7 @@ def handle_users():
             users.append(user)
 
         if len(users) > 0:
-            return jsonify(users), 200
+            return jsonify(users)
         else:
             return 'No users found', 404
 
@@ -349,10 +363,56 @@ def save_data():
     except:
         return jsonify({'error': 'Failed to save data'})
 
-@app.route('/delete/<username>', methods=['GET'])
-def delete_user(username):
-    delete_row(username)
-    return f"Deleted user with username: {username}"
+@app.route('/delete', methods=['POST'])
+def delete_user():
+    if request.method == 'POST':
+        user_id = request.form['user_id']
+        hash_url = request.form['url']
+        conn = get_db()
+        cursor1 = conn.cursor()
+        cursor2 = conn.cursor()
+        cursor3 = conn.cursor()
+        cursor3.execute("SELECT * FROM person_database_sri WHERE id = %s", (user_id,))
+        rows = cursor3.fetchall()
+        users = []
+        for row in rows:
+            user = {
+                'name': row[1],
+                'email': row[4]
+            }
+            users.append(user)
+        cursor3.close()
+        print(users)
+        if len(users) > 0:
+            name = users[0]['name']
+            mail = users[0]['email']
+            cursor1.execute('DELETE FROM person_database_sri WHERE id = %s', (user_id,))
+            cursor1.close()
+            cursor2.execute('DELETE FROM test_user_face_for_pro WHERE name = %s', (user_id,))
+            cursor2.close()
+            delete_mail(name, mail)
+            flash('Data deleted successfully', 'success')
+            session['keep_flashed_messages'] = True
+        else:
+            flash('User not found', 'error')
+
+        conn.commit()
+        conn.close()
+
+    return redirect(url_for('profile', hash_url=hash_url))
+
+
+
+@app.context_processor
+def inject_flashed_messages():
+    # Retrieve the flashed messages and decide whether to keep them or not
+    messages = get_flashed_messages()
+    if session.get('keep_flashed_messages'):
+        session.pop('keep_flashed_messages')
+    else:
+        messages = None
+    return dict(messages=messages)
+
 
 if __name__ == '__main__':
     with app.app_context():

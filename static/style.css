@@ -139,6 +139,7 @@ a {
     max-height: auto;
     height: 200px;
     display: flex;
+    text-align: center;
     align-items: center;
     justify-content: center;
     color: #f2f2f2;
@@ -212,85 +213,4 @@ a {
     padding: 20px;
     text-align: center;
     margin: 0;
-}
-/* .profile{
-    background-image: url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/7a5a3db7-fb07-4532-aa4c-93f5a5d5d651/d8aagwj-05603aa6-e3c6-4a2f-98ee-d1188bed4eb5.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzdhNWEzZGI3LWZiMDctNDUzMi1hYTRjLTkzZjVhNWQ1ZDY1MVwvZDhhYWd3ai0wNTYwM2FhNi1lM2M2LTRhMmYtOThlZS1kMTE4OGJlZDRlYjUuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.Kfd6cne5lRMtSAnOmLSn30PtRhXZwCJGClhgAD-UGmc');
-    background-size: cover;
-    background-position: center;
-    filter: blur(8px);
-} */
-
-.profile_container {
-    background-image: url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/7a5a3db7-fb07-4532-aa4c-93f5a5d5d651/dbff1rj-c8fb290d-5a35-4137-b925-759ea0e98f44.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzdhNWEzZGI3LWZiMDctNDUzMi1hYTRjLTkzZjVhNWQ1ZDY1MVwvZGJmZjFyai1jOGZiMjkwZC01YTM1LTQxMzctYjkyNS03NTllYTBlOThmNDQuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.Zk74FqcSimKjviOn9BE6AJBML75_bVcz0PzvFmwgm2Y');
-    background-size: cover;
-    background-position: center;
-    max-height: auto;
-    height: 300px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #f2f2f2;
-    position: relative;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.847);
-    
-}
-
-.profile_pic {
-    width: 200px;
-    height: auto;
-    border-radius: 50%;
-    border: 4px solid white;
-    box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.3);
-}
-
-.profile_text {
-    flex: 1;
-    text-align: left;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-
-@keyframes glow {
-    from {
-        color: #bd00ff;
-        text-shadow: 0 0 10px #00b7ff, 0 0 20px #00b7ffbe, 0 0 30px #00b7ff7b;
-    }
-    to {
-        color: #00b8ff;
-        text-shadow: 0 0 20px #bd00ff, 0 0 30px #bb00ffa5, 0 0 40px #bb00ff65;
-    }
-}
-
-@media (min-width: 800px) {
-    .profile_pic {
-        width: 300px;
-    }
-}
-
-.profile_text h3 {
-    font-size: 30px;
-    text-shadow: 0 0 20px #d600ff;
-}
-
-.profile_text p {
-    margin-bottom: 10px;
-}
-
-.profile_text a {
-    display: block;
-    margin-top: 10px;
-}
-
-/* Responsive styles */
-@media (max-width: 767px) {
-    .profile_text h3 {
-        font-size: 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    .profile_text h3 {
-        font-size: 18px;
-    }
 }
