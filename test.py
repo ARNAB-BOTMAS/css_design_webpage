@@ -298,6 +298,8 @@ def handle_users():
 
         if len(users) > 0:
             return jsonify(users)
+        elif len(users) == 0:
+            return 'empty', 200
         else:
             return 'No users found', 404
 
