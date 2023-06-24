@@ -384,7 +384,6 @@ def delete_user():
             }
             users.append(user)
         cursor3.close()
-        print(users)
         if len(users) > 0:
             name = users[0]['name']
             mail = users[0]['email']
