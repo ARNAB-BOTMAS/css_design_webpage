@@ -1,58 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Download</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <title>Text Bar Example</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        .text-bar {
+            display: none;
+            margin-top: 10px;
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            $("#openBtn").click(function() {
+                $(".text-bar").slideDown();
+            });
+
+            $("#textForm").submit(function(event) {
+                event.preventDefault(); // Prevent form submission
+
+                var textValue = $("#textInput").val();
+                if (textValue !== "") {
+                    // Perform database saving operation here
+
+                    // Clear the text input
+                    $("#textInput").val("");
+
+                    // Close the text bar
+                    $(".text-bar").slideUp();
+                }
+            });
+        });
+    </script>
 </head>
 <body>
-
-<div class="topnav" id="myTopnav">
-  <a href="/" class="active">Home</a>
-  <a href="/login">Log in</a>
-  <a href="/register">Register</a>
-  <a href="#about">About</a>
-  <a href="/download">Download</a>
-  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
-    <i class="fa fa-bars"></i>
-  </a>
-</div>
-
-<div class="banner">
-    <h1 style="justify-content: center">Download Srishti</h1>
-</div>
-<div class="body">
-    
-</div>
-
-<div class="footer">
-    <h3 style="padding-left: 10px; padding-top: 10px;">Developer team</h3><br>
-    <div class="user-images">
-        {% for user in users %}
-        <div class="user-card">
-            <img src="{{ url_for('static', filename=user[0] ~ '.png') }}" alt="{{ user[0] }} Image" width="100" height="100">
-            <h4>{{ user[0] }}</h4>
-        </div>
-        {% endfor %}
+    <button id="openBtn">Open Text Bar</button>
+    <div class="text-bar">
+        <form id="textForm">
+            <input type="text" id="textInput" placeholder="Enter your text" style="width: 20%; height: 20%;">
+            <input type="submit" value="Submit">
+        </form>
     </div>
-    <hr style="max-width: 90%; width: 100%;">
-    <p>&copy; 2023 Srishti. All rights reserved.</p>
-</div>
-
-
-<script>
-function myFunction() {
-  var x = document.getElementById("myTopnav");
-  if (x.className === "topnav") {
-    x.className += " responsive";
-  } else {
-    x.className = "topnav";
-  }
-}
-</script>
-
 </body>
 </html>

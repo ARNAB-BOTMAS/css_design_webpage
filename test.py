@@ -11,7 +11,7 @@ import requests
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-DATABASE_URL = 'postgres://srishti_database_sb6x_user:GesdgP3MvK6VJWc3IKusqx3WpgLvjk31@dpg-ci9dfudph6ekmcka4cvg-a.oregon-postgres.render.com/srishti_database_sb6x'
+DATABASE_URL = 'postgres://srishti_database_ai_user:JaYaL1A92lAp0ikj0RxGjgKihQ3etVWj@dpg-cic47a95rnuk9qb0sbc0-a.oregon-postgres.render.com/srishti_database_ai'
 
 url = generate_hash()
 
@@ -26,12 +26,13 @@ def get_db():
 def create_table():
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute('''CREATE TABLE IF NOT EXISTS developer_database
+    cursor.execute('''CREATE TABLE IF NOT EXISTS dev_datas
                         (id SERIAL PRIMARY KEY,
                         hash_id_code TEXT,
                         username TEXT,
                         password TEXT,
                         email TEXT,
+                        bio TEXT,
                         images BYTEA)''')
     cursor.execute('''CREATE TABLE IF NOT EXISTS person_database_sri
                       (id TEXT PRIMARY KEY,
@@ -42,6 +43,10 @@ def create_table():
     cursor.execute('''CREATE TABLE IF NOT EXISTS API_KEY
                       (id SERIAL PRIMARY KEY,
                        api_key TEXT)''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS test_user
+                    (id SERIAL PRIMARY KEY,
+                    name TEXT,
+                    encoding BYTEA)''')
     conn.commit()
 
 
@@ -58,14 +63,14 @@ def index():
     cursor1 = conn.cursor()
     cursor2 = conn.cursor()
 
-    cursor1.execute('SELECT images FROM developer_database')
-    cursor2.execute('SELECT username FROM developer_database')
+    cursor1.execute('SELECT images FROM dev_datas')
+    cursor2.execute('SELECT username FROM dev_datas')
 
     data = cursor1.fetchall()
     cursor1.close()
     users = cursor2.fetchall()
     cursor2.close()
-    print(users)
+    # print(users)
     image_user_mapping = {}  # Dictionary to store image-user mapping
 
     for i in range(len(users)):
@@ -132,25 +137,33 @@ def register_page():
         password = request.form['password']
         email = request.form['email']
         profile_picture = request.files['profile_picture']
+        bio = request.form['bio']
         hash_id_code = user_hash(username, password)
-        
-        try:
-            profile_picture_data = profile_picture.read()
-            conn = get_db()
-            cursor1 = conn.cursor()
-            cursor2 = conn.cursor()
-            
-            cursor1.execute('INSERT INTO developer_database (hash_id_code, username, password, email, images) VALUES (%s, %s, %s, %s, %s)',
-                            (hash_id_code, username, password, email, psycopg2.Binary(profile_picture_data)))
-            cursor1.close()
-            
-            cursor2.execute('INSERT INTO API_KEY (api_key) VALUES (%s)', (hash_id_code,))
-            cursor2.close()
-            dev_mail(username, hash_id_code, email)
-            conn.commit()
-            return redirect('/login')
-        except Exception as e:
-            return f'Image upload not successful: {e}', 404
+        # print(hash_id_code)
+        # print(profile_picture)  # Check if the object exists and contains data
+        # print(profile_picture.filename)  # Check the filename to ensure it's not empty
+        if profile_picture.filename != '':
+            try:
+                profile_picture_data = profile_picture.read()
+                # print(profile_picture_data)
+                conn = get_db()
+                cursor1 = conn.cursor()
+                cursor2 = conn.cursor()
+                
+                cursor1.execute('INSERT INTO dev_datas (hash_id_code, username, password, email, bio, images) VALUES (%s, %s, %s, %s, %s, %s)',
+                    (hash_id_code, username, password, email, bio, psycopg2.Binary(profile_picture_data),))
+                
+                cursor1.close()
+                
+                cursor2.execute('INSERT INTO API_KEY (api_key) VALUES (%s)', (hash_id_code,))
+                cursor2.close()
+                dev_mail(username, hash_id_code, email)
+                conn.commit()
+                return redirect('/login')
+            except Exception as e:
+                return "Unable to try", 404
+        else:
+            return 'Image upload not successful', 404
 
     return render_template('register.html', url=url)
 
@@ -166,11 +179,11 @@ def login_page():
         # Check if the username and password match in the database
         conn = get_db()
         cursor = conn.cursor()
-        cursor.execute('SELECT hash_id_code FROM developer_database WHERE username=%s AND password=%s',
+        cursor.execute('SELECT hash_id_code FROM dev_datas WHERE username=%s AND password=%s',
                        (username, password))
         user = cursor.fetchone()
         hash_url = user[0]
-        print(user)
+        # print(user)
         if user:
             session['username'] = username
             return redirect(url_for('profile', hash_url=hash_url))
@@ -189,10 +202,10 @@ def profile(hash_url):
         cursor1 = conn.cursor()
         cursor2 = conn.cursor()
         cursor3 = conn.cursor()
-        cursor1.execute('SELECT email FROM developer_database WHERE username=%s', (username,))
+        cursor1.execute('SELECT email FROM dev_datas WHERE username=%s', (username,))
         email = cursor1.fetchone()[0]
         cursor1.close()
-        cursor2.execute('SELECT images FROM developer_database WHERE username=%s', (username,))
+        cursor2.execute('SELECT images FROM dev_datas WHERE username=%s', (username,))
         rows = cursor2.fetchall()
         valid_api_key = hash_url
         images = []
@@ -213,7 +226,7 @@ def profile(hash_url):
             }
             user_database.append(user)
         cursor.close()
-        cursor3.execute('SELECT * FROM test_user_face_for_pro')
+        cursor3.execute('SELECT * FROM test_user')
         face_data = cursor3.fetchall()
         face_id = []
         for row1 in face_data:
@@ -240,8 +253,8 @@ def download_page():
     conn = get_db()
     cursor1 = conn.cursor()
     cursor2 = conn.cursor()
-    cursor1.execute('SELECT images FROM developer_database')
-    cursor2.execute('SELECT username FROM developer_database')
+    cursor1.execute('SELECT images FROM dev_datas')
+    cursor2.execute('SELECT username FROM dev_datas')
     data = cursor1.fetchall()
     cursor1.close()
     users = cursor2.fetchall()
@@ -339,7 +352,7 @@ def delete_row(username):
     conn = get_db()
     cursor = conn.cursor()
 
-    query = "DELETE FROM developer_database WHERE username = %s"
+    query = "DELETE FROM dev_datas WHERE username = %s"
     cursor.execute(query, (username,))
 
     conn.commit()
@@ -389,7 +402,7 @@ def delete_user():
             mail = users[0]['email']
             cursor1.execute('DELETE FROM person_database_sri WHERE id = %s', (user_id,))
             cursor1.close()
-            cursor2.execute('DELETE FROM test_user_face_for_pro WHERE name = %s', (user_id,))
+            cursor2.execute('DELETE FROM test_user WHERE name = %s', (user_id,))
             cursor2.close()
             delete_mail(name, mail)
             flash('Data deleted successfully', 'success')
@@ -413,6 +426,35 @@ def inject_flashed_messages():
     else:
         messages = None
     return dict(messages=messages)
+
+@app.route(f"/{url}/about/Srishti")
+def about_page():
+    conn = get_db()
+
+    cursor1 = conn.cursor()
+    cursor2 = conn.cursor()
+
+    cursor1.execute('SELECT images FROM dev_datas')
+    cursor2.execute('SELECT username, bio FROM dev_datas')  # Modify the query to include the bio field
+
+    data = cursor1.fetchall()
+    cursor1.close()
+    users = cursor2.fetchall()
+    cursor2.close()
+    
+    image_user_mapping = {}  # Dictionary to store image-user mapping
+
+    for i in range(len(users)):
+        image_data = data[i][0]
+        image_encoded = base64.b64encode(image_data).decode('utf-8')
+        username = users[i][0]
+        bio = users[i][1]  # Get the bio from the fetched data
+        image_user_mapping[image_encoded] = {'username': username, 'bio': bio}  # Store both username and bio in the dictionary
+
+    conn.close()
+
+    return render_template('about.html', image_user_mapping=image_user_mapping, url=url)
+
 
 
 if __name__ == '__main__':

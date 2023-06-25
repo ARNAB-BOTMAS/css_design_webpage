@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to Srishti</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <style>
+        .table-container {
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+    </style>
+</head>
+<body bgcolor="#333">
+    <div class="pronav" id="mypronav">
+        <h1>Developer</h1>
+    </div>
+    <div class="probanner">
+        <div class="propic">
+            {% for image in images %}
+                <img src="data:image/jpeg;base64,{{ image }}" class="profile_pic">
+            {% endfor %}
+        </div>
+        <div class="profile_text">
+            <h3>Welcome, Developer {{ username }}!</h3>
+            <p>Email: {{ email }}</p>
+            <a href="/logout"><button>Log Out</button></a><br><br>
+            <button onclick="showTable('table1')">Table 1</button>
+            <button onclick="showTable('table2')">Table 2</button>
+        </div>
+    </div>
+        <div class="user_database">
+            <div id="table1" class="table-container active">
+                <table border="1">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Gender</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                        <th>Password</th>
+                    </tr>
+                    {% for row in user_database %}
+                        <tr>
+                            <td>{{ row['id'] }}</td>
+                            <td>{{ row['name'] }}</td>
+                            <td>{{ row['gender'] }}</td>
+                            <td>{{ row['email'] }}</td>
+                            <td>{{ row['password'] }}</td>
+                            <td>
+                                <form method="DELETE">
+                                    <input type="text" name="user_id" id="user_id" value="{{ row['id'] }}" hidden>
+                                    <input type="submit" value="DELETE" style="width: 100%;">
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+            <div id="table2" class="table-container">
+                <h2>Table 2</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Product</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Phone</td>
+                            <td>$500</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Laptop</td>
+                            <td>$1000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <script>
+            function showTable(tableId) {
+                // Hide all table containers
+                var containers = document.getElementsByClassName('table-container');
+                for (var i = 0; i < containers.length; i++) {
+                    containers[i].classList.remove('active');
+                }
+                
+                // Show the selected table container
+                var tableContainer = document.getElementById(tableId);
+                tableContainer.classList.add('active');
+            }
+        </script>
+</body>
+</html>

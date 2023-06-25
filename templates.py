@@ -164,6 +164,8 @@ def dev_mail_template(name, api_key):
 """
 
     message.attach(MIMEText(mail_content, 'html'))
+    return message
+    
     
 def delete_mail_temp(name):
     message = MIMEMultipart()
