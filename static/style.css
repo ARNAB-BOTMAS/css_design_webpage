@@ -227,6 +227,7 @@ a {
 @media (max-width: 768px) {
     .info_pic {
         width: 70px;
+        height: 70px;
     }
     .info_container {
         flex-direction: column;
