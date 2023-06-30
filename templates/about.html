@@ -25,7 +25,7 @@
     <h1 style="justify-content: center">About Srishti</h1>
 </div>
 <div class="body">
-    <h3 style="padding-left: 10px; padding-top: 10px;">This our Developer team</h3><br>
+    <h3 style="padding-left: 10px; padding-top: 10px;">Developer team</h3><br>
     {% for image, user_info in image_user_mapping.items() %}
     <div style="display: flex; padding: 20px;" class="info_container">
         <div>
@@ -39,7 +39,7 @@
                     Developer: {{ user_info.username }}
                 {% endif %}
             </h4>
-            <p>Bio: {{ user_info.bio }}</p>  <!-- Access the bio data -->
+            <p><i>{{ user_info.bio }}</i></p>  <!-- Access the bio data -->
         </div>
     </div>    
     {% endfor %}
