@@ -99,6 +99,10 @@ def login():
 def about():
     return redirect(f"/{url}/about/Srishti")
 
+@app.route('/contact')
+def contact():
+    return redirect(f"/{url}/contact/us")
+
 
 @app.route('/apis')
 def apis_page():
@@ -452,6 +456,33 @@ def about_page():
     conn.close()
 
     return render_template('about.html', image_user_mapping=image_user_mapping, url=url)
+
+@app.route(f'/{url}/contact/us')
+def contact_page():
+    conn = get_db()
+
+    cursor1 = conn.cursor()
+    cursor2 = conn.cursor()
+
+    cursor1.execute('SELECT images FROM dev_datas')
+    cursor2.execute('SELECT username FROM dev_datas')
+
+    data = cursor1.fetchall()
+    cursor1.close()
+    users = cursor2.fetchall()
+    cursor2.close()
+    # print(users)
+    image_user_mapping = {}  # Dictionary to store image-user mapping
+
+    for i in range(len(users)):
+        image_data = data[i][0]
+        image_encoded = base64.b64encode(image_data).decode('utf-8')
+        username = users[i][0]
+        image_user_mapping[image_encoded] = username
+
+    conn.close()
+
+    return render_template('contact.html', image_user_mapping=image_user_mapping, url=url)
 
 
 

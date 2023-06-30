@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact Us</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+<style>
+  .contact-details {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.location, .email, .image-gif {
+    flex-basis: 100%;
+    margin-bottom: 20px;
+}
+
+@media (min-width: 768px) {
+  .location, .email, .image-gif {
+    flex-basis: calc(50% - 20px);
+  }
+}
+
+@media (min-width: 992px) {
+  .location, .email, .image-gif {
+    flex-basis: calc(33.33% - 20px);
+  }
+}
+
+.location, .email {
+    margin-bottom: 20px;
+    display: flex;
+}
+
+.location p, .email p {
+    margin-right: 10px;
+}
+
+.location img,
+.email img {
+    width: 50px;
+    height: 50px;
+}
+
+.image-gif {
+    background-image: url("https://cdna.artstation.com/p/assets/images/images/028/102/058/original/pixel-jeff-matrix-s.gif?1593487263");
+    width: 100%;
+    max-width: 500px;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    color: #f2f2f2;
+    border-radius: 30px;
+    box-shadow: 0 0px 20px rgba(0, 0, 0, 0.4);
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+
+.text-animation {
+    animation: textAnimation 5s ease-in-out infinite;
+}
+
+@keyframes textAnimation {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0);
+    }
+}
+
+</style>
+</head>
+<body>
+
+  <div class="topnav" id="myTopnav">
+    <a href="/" class="active">Home</a>
+    <a href="/login">Log in</a>
+    <a href="/register">Register</a>
+    <a href="/about">About</a>
+    <a href="/download">Download</a>
+    <a href="/contact">Contact Us</a>
+    <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+      <i class="fa fa-bars"></i>
+    </a>
+  </div>
+
+<div class="banner">
+    <h1 style="justify-content: center;">Contact Us</h1>
+</div>
+<div class="body">
+    <main>
+      <div class="content">
+        <div class="contact-info">
+          <h2>Talk to us</h2>
+          <p>We would love to hear from you! Please don't hesitate to reach out to us with any questions, comments, or concerns you may have</p>
+        </div>
+        <div class="contact-details">
+          <div class="location">
+            <a href="https://goo.gl/maps/p7biHrvaFpTo3Mky9"><img src="https://raw.githubusercontent.com/ARNAB-BOTMAS/sri_python/main/location.png" alt="pin"></a>
+            <p>
+              <b>Sammilani Mahavidyalaya</b>
+              Baghajatin Eastern Metropolitan Bypass,<br>1925, Chak Garia, Baghajatin Colony,<br>Kolkata-700094<br>West Bengal
+            </p>
+          </div>
+          <div class="email">
+            <img src="https://raw.githubusercontent.com/ARNAB-BOTMAS/sri_python/main/mail.png" alt="mail">
+            <p>
+              <b>Contact Us</b>
+              <b>Email:</b> srishti.ai.arnab.ashish.tasir@gmail.com
+            </p>
+          </div>
+          <div class="image-gif">
+            <div style="background-color: #3333335e; width: 100%; height: 100%; backdrop-filter: blur(5px); border-radius: 30px; align-items: center; justify-content: center; text-align: center; display: flex;">
+              <div class="text-animation">Welcome to our website</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+</div>
+<div class="footer">
+    <h3 style="padding-left: 10px; padding-top: 10px;">This our Developer team</h3><br>
+    <div class="user-images">
+      {% for image, username in image_user_mapping.items() %}  
+      <div class="user-card">
+          <img src="data:image/jpeg;base64,{{ image }}" alt="Image">
+          <h4>
+            {% if username == 'Arnab Mondal' %}
+                Main Developer: {{ username }}
+            {% else %}
+                Developer: {{ username }}
+            {% endif %}
+          </h4>
+      </div>
+      {% endfor %}
+    </div>
+    <hr style="max-width: 90%; width: 100%;">
+    <p>&copy; 2023 Srishti. All rights reserved.</p>
+</div>
+
+
+<script>
+function myFunction() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}
+
+var textElement = document.querySelector(".text-animation");
+var texts = ["We are happy to help you", "Don't hesitate contact us", "We answer your question or your queries", "Anytime anywhere", "We're glad to answer your question"]; // Array of text options
+
+function changeText() {
+    var randomIndex = Math.floor(Math.random() * texts.length);
+    var newText = texts[randomIndex];
+    textElement.textContent = newText;
+}
+
+// Call the changeText function every 3 seconds
+setInterval(changeText, 3000);
+</script>
+
+</body>
+</html>
