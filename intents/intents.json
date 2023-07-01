@@ -329,6 +329,18 @@
       "responses": [
         "logout"
       ]
+    },
+    {
+      "tag": "news",
+      "patterns": [
+        "tell me today's news",
+        "today's news",
+        "news report",
+        "news"
+      ],
+      "responses": [
+        "news"
+      ]
     }
   ]
 }
