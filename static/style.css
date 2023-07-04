@@ -236,3 +236,22 @@ a {
         padding: 10px;
     }
 }
+
+#bio {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Styles for larger screens */
+  @media only screen and (min-width: 768px) {
+    #bio {
+      max-width: 500px;
+    }
+  }
+
+  /* Styles for smaller screens */
+  @media only screen and (max-width: 767px) {
+    #bio {
+      max-width: 100%;
+    }
+  }
