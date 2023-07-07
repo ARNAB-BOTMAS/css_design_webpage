@@ -10,9 +10,10 @@ import requests
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
+com_key = "SRIshtiAAT2023"
 
-DATABASE_URL = 'postgres://srishti_database_ai_user:JaYaL1A92lAp0ikj0RxGjgKihQ3etVWj@dpg-cic47a95rnuk9qb0sbc0-a/srishti_database_ai'
-# DATABASE_URL = 'postgres://srishti_database_ai_user:JaYaL1A92lAp0ikj0RxGjgKihQ3etVWj@dpg-cic47a95rnuk9qb0sbc0-a.oregon-postgres.render.com/srishti_database_ai'
+# DATABASE_URL = 'postgres://srishti_database_ai_user:JaYaL1A92lAp0ikj0RxGjgKihQ3etVWj@dpg-cic47a95rnuk9qb0sbc0-a/srishti_database_ai'
+DATABASE_URL = 'postgres://srishti_database_ai_user:JaYaL1A92lAp0ikj0RxGjgKihQ3etVWj@dpg-cic47a95rnuk9qb0sbc0-a.oregon-postgres.render.com/srishti_database_ai'
 
 
 url = generate_hash()
@@ -139,6 +140,7 @@ def apis_page():
 @app.route(f'/{url}/register/developer', methods=['GET', 'POST'])
 def register_page():
     if request.method == 'POST':
+        dev_key = request.form['dev_key']
         username = request.form['username']
         password = request.form['password']
         email = request.form['email']
@@ -148,28 +150,31 @@ def register_page():
         # print(hash_id_code)
         # print(profile_picture)  # Check if the object exists and contains data
         # print(profile_picture.filename)  # Check the filename to ensure it's not empty
-        if profile_picture.filename != '':
-            try:
-                profile_picture_data = profile_picture.read()
-                # print(profile_picture_data)
-                conn = get_db()
-                cursor1 = conn.cursor()
-                cursor2 = conn.cursor()
-                
-                cursor1.execute('INSERT INTO dev_datas (hash_id_code, username, password, email, bio, images) VALUES (%s, %s, %s, %s, %s, %s)',
-                    (hash_id_code, username, password, email, bio, psycopg2.Binary(profile_picture_data),))
-                
-                cursor1.close()
-                
-                cursor2.execute('INSERT INTO API_KEY (api_key) VALUES (%s)', (hash_id_code,))
-                cursor2.close()
-                dev_mail(username, hash_id_code, email)
-                conn.commit()
-                return redirect('/login')
-            except Exception as e:
-                return "Unable to try", 404
+        if dev_key == com_key:
+            if profile_picture.filename != '':
+                try:
+                    profile_picture_data = profile_picture.read()
+                    # print(profile_picture_data)
+                    conn = get_db()
+                    cursor1 = conn.cursor()
+                    cursor2 = conn.cursor()
+                    
+                    cursor1.execute('INSERT INTO dev_datas (hash_id_code, username, password, email, bio, images) VALUES (%s, %s, %s, %s, %s, %s)',
+                        (hash_id_code, username, password, email, bio, psycopg2.Binary(profile_picture_data),))
+                    
+                    cursor1.close()
+                    
+                    cursor2.execute('INSERT INTO API_KEY (api_key) VALUES (%s)', (hash_id_code,))
+                    cursor2.close()
+                    dev_mail(username, hash_id_code, email)
+                    conn.commit()
+                    return redirect('/login')
+                except Exception as e:
+                    return "Unable to try", 404
+            else:
+                return 'Image upload not successful', 404
         else:
-            return 'Image upload not successful', 404
+            return redirect('/register')
 
     return render_template('register.html', url=url)
 
@@ -486,7 +491,10 @@ def contact_page():
 
     return render_template('contact.html', image_user_mapping=image_user_mapping, url=url)
 
-
+# @app.route('/email_all/<username>', methods=['GET'])
+# def email_all(username):
+#     # delete_row(username)
+#     return f"Deleted user with username: {username}"
 
 if __name__ == '__main__':
     with app.app_context():

@@ -30,12 +30,16 @@ a {
 .body_log {
     background-color: #f2f2f2;
     display: flex;
+    /* padding: 50px; */
+    padding-top: 60px;
+    padding-bottom: 60px;
     justify-content: center;
     align-items: center;
     height: 50vh;
 }
 .container {
     background-color: #566573;
+    margin: 50px;
     color: #f2f2f2;
     max-width: 400px;
     padding: 20px;
@@ -43,8 +47,12 @@ a {
 }
 @media screen and (max-width: 600px) {
     .container {
+        margin: 50px;
         max-width: 60%;
     }
+    /* .body_log{
+        padding: 20px;
+    } */
 }
 
 .log_in{
@@ -242,10 +250,40 @@ a {
     box-sizing: border-box;
   }
 
+#dev_key {
+    width: 100%;
+    box-sizing: border-box;
+}
+#username {
+    width: 100%;
+    box-sizing: border-box;
+}
+#password {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#email {
+    width: 100%;
+    box-sizing: border-box;
+}
+
   /* Styles for larger screens */
   @media only screen and (min-width: 768px) {
     #bio {
       max-width: 500px;
+    }
+    #dev_key {
+        max-width: 295px;
+      }
+      #username {
+        max-width: 315px;
+      }
+      #password {
+        max-width: 318px;
+      }
+    #email {
+        max-width: 350px;
     }
   }
 
@@ -253,5 +291,17 @@ a {
   @media only screen and (max-width: 767px) {
     #bio {
       max-width: 100%;
+    }
+    #dev_key {
+        max-width: 100%;
+    }
+    #username {
+        max-width: 100%;
+    }
+    #password {
+        max-width: 100%;
+    }
+    #email {
+        max-width: 100%;
     }
   }
