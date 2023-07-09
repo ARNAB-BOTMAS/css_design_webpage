@@ -12,8 +12,8 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 com_key = "SRIshtiAAT2023"
 
-DATABASE_URL = 'postgres://srishti_database_ai_user:JaYaL1A92lAp0ikj0RxGjgKihQ3etVWj@dpg-cic47a95rnuk9qb0sbc0-a/srishti_database_ai'
-# DATABASE_URL = 'postgres://srishti_database_ai_user:JaYaL1A92lAp0ikj0RxGjgKihQ3etVWj@dpg-cic47a95rnuk9qb0sbc0-a.oregon-postgres.render.com/srishti_database_ai'
+# DATABASE_URL = 'postgres://srishti_database_ai_user:JaYaL1A92lAp0ikj0RxGjgKihQ3etVWj@dpg-cic47a95rnuk9qb0sbc0-a/srishti_database_ai'
+DATABASE_URL = 'postgres://srishti_database_ai_user:JaYaL1A92lAp0ikj0RxGjgKihQ3etVWj@dpg-cic47a95rnuk9qb0sbc0-a.oregon-postgres.render.com/srishti_database_ai'
 
 
 url = generate_hash()
@@ -105,6 +105,11 @@ def about():
 @app.route('/contact')
 def contact():
     return redirect(f"/{url}/contact/us")
+
+@app.route('/github')
+def github():
+    return redirect("https://github.com/ARNAB-BOTMAS/Srishti_project")
+
 
 
 @app.route('/apis')
