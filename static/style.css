@@ -8,6 +8,22 @@ a {
     color: inherit;
 }
 
+.btn-download{
+    color: blue;
+    animation: chenge 1s ease-in-out infinite alternate;
+}
+
+@keyframes chenge {
+    from {
+        color: #bd00ff;
+        text-shadow: 0 0 10px #00b7ff, 0 0 20px #00b7ffbe, 0 0 30px #00b7ff7b;
+    }
+    to {
+        color: #00b8ff;
+        text-shadow: 0 0 20px #bd00ff, 0 0 30px #bb00ffa5, 0 0 40px #bb00ff65;
+    }
+}
+
 .body{
     padding-left: 10px;
     padding-right: 10px;
