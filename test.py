@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, g, jsonify, url_for, flash, get_flashed_messages
+from flask import Flask, render_template, request, redirect, session, g, jsonify, url_for, flash, get_flashed_messages, send_file
 from github import Github
 import psycopg2
 import base64
@@ -85,6 +85,11 @@ def index():
     conn.close()
 
     return render_template('index.html', image_user_mapping=image_user_mapping, url=url)
+
+@app.route('/projectreport')
+def project():
+    file_path = 'Report/projectReport.pdf'  # Replace with the actual path to your file
+    return send_file(file_path, as_attachment=True)
 
 @app.route('/download')
 def download():
